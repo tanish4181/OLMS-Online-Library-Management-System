@@ -1,1 +1,1 @@
-# SmartLib Manager
+# OLMS (Online Library Management System)
