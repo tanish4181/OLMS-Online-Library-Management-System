@@ -1,1 +1,1 @@
-# ExpenseTracker
+# SmartLib Manager
