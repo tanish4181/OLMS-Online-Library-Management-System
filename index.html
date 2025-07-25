@@ -14,7 +14,7 @@
   <body>
     <!-- Navbar -->
     <section class="to-check">
-      <nav class="navbar navbar-expand-lg bg">
+      <nav class="navbar navbar-expand-lg navbar-main ">
         <div class="container-fluid">
           <a class="navbar-brand" href="#">OLMS</a>
           <button
@@ -34,46 +34,27 @@
                 <a class="nav-link active" aria-current="page" href="#">Home</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">about</a>
+                <a class="nav-link" href="about.html">About</a>
               </li>
-              <li class="nav-item dropdown">
-                <a
-                  class="nav-link dropdown-toggle"
-                  href="#"
-                  role="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  Dropdown
-                </a>
-                <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" href="#">Action</a></li>
-                  <li><a class="dropdown-item" href="#">Another action</a></li>
-                  <li><hr class="dropdown-divider" /></li>
-                  <li>
-                    <a class="dropdown-item" href="#">Something else here</a>
-                  </li>
-                </ul>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">Contact</a>
-              </li>
+              
+              
+              
             </ul>
             <!-- login buttons -->
-            <div class="user lg-ms-5">
+            <div class="user lg-ms-5 mb-1 me-1">
               <button
                 type="button"
-                class="btn btn-outline-warning sm-my-2"
+                class="btn sm-my-2 btn-warning"
                 data-bs-toggle="modal"
                 data-bs-target="#userBackdrop"
               >
-                user Login
+                User
               </button>
             </div>
-            <div class="admin ms-1">
+            <div class="admin ms-0 mb-1">
               <button
                 type="button"
-                class="btn btn-warning"
+                class="btn btn-danger"
                 data-bs-toggle="modal"
                 data-bs-target="#adminBackdrop"
               >
@@ -86,7 +67,7 @@
     </section>
 
     <!-- Heading -->
-    <div class="text-center py-4 bg-secondary text-white">
+    <div class="text-center py-4 text-white home-heading">
       <h1 class="fw-bold">OLMS – Your Digital Library Portal</h1>
       <h5>Search, borrow, and manage your books online with ease.</h5>
     </div>
@@ -196,7 +177,7 @@
     </div>
     <!-- footer -->
 
-    <div class="container">
+    <div class="container" id="footer">
       <footer
         class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top"
       >
