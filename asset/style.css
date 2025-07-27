@@ -125,12 +125,15 @@ body {
 }
 .aboutus-card{
   margin-top: 125px;
-  border: ;
 }
-.aboutus-card:hover{
-  box-shadow: 4px 4px 4px 4px lightgray;
-  border-radius: 2px;
-  padding: 5px;
+
+#github-link-button{
+  background-color: black;
+  color: white;
+  padding: 4px;
+  margin-bottom: 5px;
+  border-radius: 18px;
+
 }
 #footer {
   margin-top: auto;
