@@ -13,32 +13,62 @@
   </head>
   <body>
     <!-- Navbar -->
-    <div
-      class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start bg-dark p-2"
-    >
-      <a
-        href="index.html"
-        class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none"
-      >
-        <img
-          src="asset/images/Gemini_Generated_Image_ddphtuddphtuddph.png"
-          alt="Logo"
-          style="width: 40px"
-        />
-      </a>
-      <ul
-        class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0"
-      >
-        <li><a href="./index.html" class="nav-link px-2 text-white">Home</a></li>
-        <li>
-          <a href="./about.html" class="nav-link px-2 text-white">About Us</a>
-        </li>
-      </ul>
-      <div class="text-end">
-        <button type="button" class="btn btn-warning me-2">User</button>
-        <button type="button" class="btn btn-danger">Admin</button>
-      </div>
-    </div>
+    <section class="to-check-main">
+      <nav class="navbar navbar-expand-lg navbar-main">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="index.html">OLMS</a>
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a
+                  class="nav-link active"
+                  aria-current="page"
+                  href="./index.html"
+                  >Home</a
+                >
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="about.html">About</a>
+              </li>
+            </ul>
+            <!-- login buttons -->
+            <div class="user lg-ms-5 mb-1 me-1">
+              <a href="./auth/UserLogin.html"><button
+                type="button"
+                class="btn sm-my-2 btn-warning"
+                data-bs-toggle="modal"
+                data-bs-target="#userBackdrop"
+              >
+                User
+              </button></a>
+            </div>
+            <div class="admin ms-0 mb-1">
+              <a href="./auth/adminLogin.html">
+                <button
+                  type="button"
+                  class="btn btn-danger"
+                  data-bs-toggle="modal"
+                  data-bs-target="#adminBackdrop"
+                >
+                  Admin
+                </button></a
+              >
+            </div>
+          </div>
+        </div>
+      </nav>
+    </section>
     <!-- footer -->
 
     <div class="container">

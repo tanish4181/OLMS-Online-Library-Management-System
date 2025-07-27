@@ -64,15 +64,32 @@
 .form{
     padding: 20px;
 }
-.heading{
+#admin-login-heading{
     text-align: center;
     padding: 10px;
     height: auto;
     width: auto;
     border-radius: 10px 10px 0px 0px;
-    background-color:rgb(255, 193, 7);
+    background-color:#dc3545;
+}
+#user-login-heading{
+    text-align: center;
+    padding: 10px;
+    height: auto;
+    width: auto;
+    border-radius: 10px 10px 0px 0px;
+    background-color: rgb(255, 193, 7);
 }
 .admin-btn{
+    background-color: #dc3545;
+    border: 0px;
+    padding: 10px;
+    margin: 10px 0px 0px 0px;
+    width: 100%;
+    
+    border-radius: 10px;
+}
+.user-btn{
     background-color: rgb(255, 193, 7);
     border: 0px;
     padding: 10px;
@@ -85,16 +102,19 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 1px solid #ffe69c;
+    border: 1px solid rgb(255, 193, 7);
     border-radius: 10px;
     height: 50px;
     width: auto;
     margin: 10px 10px 0px 10px;
-    background-color: lightyellow;
+    background-color: #fff1f3;
 }
 .admin-btn:hover {
     transform: translateY(-3px);
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
-
+.user-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
 

@@ -20,7 +20,7 @@
       <!-- navbar -->
       <nav class="navbar admin navbar-expand-lg navbar-main">
         <div class="container-fluid">
-          <a class="navbar-brand" href="#">OLMS</a>
+          <a class="navbar-brand" href="../index.html">OLMS</a>
           <button
             class="navbar-toggler"
             type="button"
@@ -38,20 +38,20 @@
                 <a class="nav-link active" aria-current="page" href="../index.html">Home</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="about.html">About</a>
+                <a class="nav-link" href="../about.html">About</a>
               </li>
             </ul>
             <!-- login buttons -->
-            <div class="user lg-ms-5 mb-1 me-1">
-              <button
+             <div class="user lg-ms-5 mb-1 me-1">
+              <a href="/auth/UserLogin.html"> <button
                 type="button"
                 class="btn sm-my-2 btn-warning"
               >
                 User
-              </button>
+              </button></a>
             </div>
             <div class="admin ms-0 mb-1">
-                <a href="/auth/adminLogin.html">              <button
+                <a href="/auth/adminLogin.html"><button
                 type="button"
                 class="btn btn-danger"
               >
@@ -65,7 +65,7 @@
       <!-- login box -->
       <div class="form-box">
         <div class="content">
-          <div class="heading">
+          <div id="admin-login-heading">
             <h3> <i class="bi bi-shield-lock me-2"></i>Admin Access</h3>
           </div>
           <div class="warning ">
