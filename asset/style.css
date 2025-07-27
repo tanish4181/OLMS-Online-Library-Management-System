@@ -1,26 +1,94 @@
 * {
-    padding: 0;
-    margin: 0;
+  padding: 0;
+  margin: 0;
 }
-.home-heading{
-    text-align: center;
-    font-size: 40px;
-    text-transform: capitalize;
-    background: linear-gradient(135deg,#667eea 0%,#764ba2 100%);
-    color: black;
-    height: auto;
-    padding: 80px;
+.home-heading {
+  text-align: center;
+  font-size: 40px;
+  text-transform: capitalize;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: black;
+  height: auto;
+  padding: 80px;
 }
-.mycaousel{
-    width: 500px;
-    height: 100px;
-    margin-left: 50px;
+.mycaousel {
+  width: 500px;
+  height: 100px;
+  margin-left: 50px;
 }
-.home-content{
-    float: right;
-    background-color: rgb(255, 255, 255);
-    padding: 50px;
-    box-shadow: 4px 4px 4px 4px lightgray;
-    
+.home-content {
+  float: right;
+  background-color: rgb(255, 255, 255);
+  padding: 50px;
+  box-shadow: 4px 4px 4px 4px lightgray;
 }
 
+.to-check {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  height: 100vh;
+  width: 100%;
+}
+.admin{
+    background-color: white;
+}
+.login {
+  border: 1px solid;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+
+}
+.main{
+
+    height: 500px;
+    width: 400px;
+}
+.form-box{
+
+    height: auto;
+    width: 100%;
+    height: 91%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.content{
+    margin: 20px;
+    height: auto;
+    width: 400px;
+    background-color: white;
+    border-radius: 10px;
+    margin-bottom:50px;
+}
+.form{
+    padding: 20px;
+}
+.heading{
+    text-align: center;
+    padding: 10px;
+    height: auto;
+    width: auto;
+    border-radius: 10px 10px 0px 0px;
+    background-color:rgb(255, 193, 7);
+}
+.admin-btn{
+    background-color: rgb(255, 193, 7);
+    border: 0px;
+    padding: 10px;
+    margin: 10px 0px 0px 0px;
+    width: 100%;
+    
+    border-radius: 10px;
+}
+.warning{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #ffe69c;
+    border-radius: 10px;
+    height: 50px;
+    width: auto;
+    margin: 10px 10px 0px 10px;
+    background-color: lightyellow;
+}
