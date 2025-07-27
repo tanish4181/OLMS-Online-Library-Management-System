@@ -8,8 +8,8 @@
     text-transform: capitalize;
     background: linear-gradient(135deg,#667eea 0%,#764ba2 100%);
     color: black;
-    height: 200px;
-    padding: 50px;
+    height: auto;
+    padding: 80px;
 }
 .mycaousel{
     width: 500px;
@@ -18,8 +18,9 @@
 }
 .home-content{
     float: right;
-    background-color: antiquewhite;
+    background-color: rgb(255, 255, 255);
     padding: 50px;
+    box-shadow: 4px 4px 4px 4px lightgray;
     
 }
 
