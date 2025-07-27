@@ -14,7 +14,7 @@
   <body>
     <!-- Navbar -->
     <section class="to-check-main">
-      <nav class=" navbar navbar-expand-lg navbar-main ">
+      <nav class="navbar navbar-expand-lg navbar-main">
         <div class="container-fluid">
           <a class="navbar-brand" href="#">OLMS</a>
           <button
@@ -31,14 +31,16 @@
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">Home</a>
+                <a
+                  class="nav-link active"
+                  aria-current="page"
+                  href="./index.html"
+                  >Home</a
+                >
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="about.html">About</a>
               </li>
-              
-              
-              
             </ul>
             <!-- login buttons -->
             <div class="user lg-ms-5 mb-1 me-1">
@@ -52,14 +54,16 @@
               </button>
             </div>
             <div class="admin ms-0 mb-1">
-              <button
-                type="button"
-                class="btn btn-danger"
-                data-bs-toggle="modal"
-                data-bs-target="#adminBackdrop"
+              <a href="./auth/adminLogin.html">
+                <button
+                  type="button"
+                  class="btn btn-danger"
+                  data-bs-toggle="modal"
+                  data-bs-target="#adminBackdrop"
+                >
+                  Admin
+                </button></a
               >
-                Admin
-              </button>
             </div>
           </div>
         </div>
@@ -68,8 +72,7 @@
 
     <!-- Heading -->
     <div class="text-center py-4 text-white home-heading">
-      <h1 class="fw-bold">OLMS </h1>
-      <h2>Your Digital Library Portal</h2>
+      <h1 class="fw-bold">OLMS – Your Digital Library Portal</h1>
       <h5>Search, borrow, and manage your books online with ease.</h5>
     </div>
 
@@ -155,7 +158,7 @@
         </div>
 
         <!-- Text Content on home page -->
-        <div class="col-md-6 content">
+        <div class="col-md-6">
           <div class="home-content rounded">
             <h2 class="fw-bold">
               Welcome to OLMS (Online Library Management System)
