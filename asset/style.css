@@ -218,7 +218,7 @@ text-align: center;
 
 .user-internal-box{
   height: auto;
-  width: 81%;
+  width: 82%;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -255,7 +255,7 @@ margin-top: 38px;
 }
 
 .user-latest-book {
-  border: 1px solid;
+
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
@@ -264,7 +264,7 @@ margin-top: 38px;
 
 }
 .user-book-box{
-  border: 1px solid;
+
   border-radius: 10px;
   padding: 10px;
   width: 335px;
