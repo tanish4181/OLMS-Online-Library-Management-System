@@ -211,7 +211,6 @@ text-align: center;
   font-size: 50px;  
 }
 .user-search-box {
-  border: 1px solid;
   padding: 10px;
   display: flex;
   justify-content: center;
@@ -253,4 +252,33 @@ margin-top: 38px;
   padding:8px;
   border-radius: 10px;
   margin-top: 62px;
+}
+
+.user-latest-book {
+  border: 1px solid;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 30px;
+  padding: 60px;
+
+}
+.user-book-box{
+  border: 1px solid;
+  border-radius: 10px;
+  padding: 10px;
+  width: 335px;
+  height: auto;
+  background-color: white;
+  box-shadow: 5px 2px 5px 2px lightgray;
+  transition: transform 0.3s ease-out;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.user-book-box:hover{
+ transform: translateY(-10px);  
 }
