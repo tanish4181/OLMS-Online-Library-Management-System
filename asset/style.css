@@ -222,6 +222,7 @@ text-align: center;
   width: 81%;
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   gap: 0px;
   border-radius: 10px;
   background-color: white;
@@ -231,8 +232,9 @@ text-align: center;
 
 .user-internal-box > div{
   height: auto;
-  width: 400px;
-  padding: 20px;
+  width: 355px;
+
+  padding: 10px 1px 10px 1px;
 } 
 
 .user-form{
@@ -246,3 +248,9 @@ text-align: center;
 margin-top: 38px;
 }
 
+.user-srcbx-btn > button{
+  border: 1px solid;
+  padding:8px;
+  border-radius: 10px;
+  margin-top: 62px;
+}
