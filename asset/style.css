@@ -24,14 +24,6 @@ body {
   width: 500px;
   height: 100px;
   margin-left: 51px;
-
-
-
-
-
-
-
-
 }
 .home-content {
   float: right;
@@ -146,3 +138,111 @@ body {
 #footer {
   margin-top: auto;
 }
+
+
+
+/* user block css */
+
+.user-dashboard{
+  background-color: #f4f4f4;
+}
+
+.user-dheading{
+  margin: 0px;
+  display: flex;
+  width: 100%;
+  margin-top: 30px;
+  justify-content: center;
+  flex-direction: column;
+}
+.user-dheading > h1{
+  font-size: 25px;
+  font-weight: 700;
+  color: #667eea;
+  text-align: center;
+
+}
+
+.user-hsmall-text{
+text-align: center;
+}
+
+.user-dnav{
+  margin-left: 26.5%;
+}
+
+.user-dMainBox{
+  height: auto;
+  width: auto;
+  display: flex;
+  justify-content: center;
+  padding: 0px 30px 0px 30px;
+  flex-wrap: wrap;
+  margin-top:20px ;
+  gap: 30px;
+  
+}
+
+.user-dMainBox > div{
+  height: 160px;
+  width: 250px;
+  margin: 10px 0px 10px 0px;
+  background-color: white;
+  box-shadow: 5px 2px 5px 2px lightgray;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  transition: transform 0.3s ease-in-out;
+
+} 
+
+.user-dMainBox > div:hover{
+ transform: translateY(-10px);
+}
+
+.user-small-txt{
+  text-align: center;
+}
+
+.user-numbers >h1{
+  color: #667eea;
+  font-size: 50px;  
+}
+.user-search-box {
+  border: 1px solid;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+}
+
+.user-internal-box{
+  height: auto;
+  width: 81%;
+  display: flex;
+  flex-direction: row;
+  gap: 0px;
+  border-radius: 10px;
+  background-color: white;
+  box-shadow: 5px 2px 5px 2px lightgray;
+  padding: 10px;
+}
+
+.user-internal-box > div{
+  height: auto;
+  width: 400px;
+  padding: 20px;
+} 
+
+.user-form{
+  width: 100%;
+  border: 0.5px solid lightgray;
+  padding: 8px;
+  border-radius: 10px;
+}
+
+.user-cat-lab{
+margin-top: 38px;
+}
+
