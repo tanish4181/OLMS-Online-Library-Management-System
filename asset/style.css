@@ -310,14 +310,3 @@ margin-top: 38px;
   margin-top: 8px;
 }
 
-.borrow{
-  padding: 6px 12px 6px 12px;
-  border-radius: 8px;
-  border: 0.5px solid lightgray;
-  background-color: #28a745;
-  color: white;
-  transition: transform 0.1s ease-in-out;
-}
-.borrow:active{
-  transform:scale(0.95);
-}
