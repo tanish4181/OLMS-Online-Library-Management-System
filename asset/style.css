@@ -291,3 +291,165 @@ margin-top: 38px;
 .user-book-box:hover{
  transform: translateY(-10px);  
 }
+.upper{
+    background-color: blue;
+    height: 120px;
+    width: 100%;
+    
+}
+.nav-icon{
+    display: flex;
+    justify-content: space-between;
+    
+    
+}
+.nav{
+    margin-top: 30px;
+    margin-right: 25px;
+    color: white;   
+    font-size: 1.2em;
+    font-weight: bold;
+    padding: 5px 20px;
+}
+
+.nav:hover{
+    cursor: pointer;
+    height: 20px;
+    background-color: black;
+  
+}
+
+.box{
+    margin-left: 5%;
+    height: 25px;
+    width: 20%;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    padding: 70px 0px;
+    border: 1px solid black;
+    box-shadow: 5px 5px 10px gray;
+}
+
+.between{
+    display: flex;
+    justify-content: space-evenly;
+    margin-inline: 20px;
+margin-right: 80px;}
+
+.down{
+    display: flex;
+    margin-block: 30px;
+}
+
+.box1{
+    margin-left: 6%;
+    height: 25px;
+    width: 19%;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    padding: 70px 0px;
+    border: 1px solid black;
+    box-shadow: 5px 5px 10px gray;
+}
+
+.box2{
+     margin-left: 4%;
+    height: 25px;
+    width: 19%;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    padding: 70px 0px;
+    border: 1px solid black;
+    box-shadow: 5px 5px 10px gray;
+}
+
+.button {
+  background-color: #04AA6D;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  
+  font-size: 16px;
+  margin: 4px 50px;
+  cursor: pointer;
+}
+.button:hover{
+    background-color: blue;
+}
+
+table, td, th {  
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th, td {
+  padding: 15px;
+  
+}
+
+.table_sajal{
+    display: flex;
+    justify-content: flex-start;
+    margin-left: 55px;
+    border: 1px solid white;
+    box-shadow: 1px 15px 45px gainsboro;
+    width: 45%;
+    height: 570px;
+}
+
+.container{
+  
+    margin-left: 55px;
+    border: 1px solid white;
+    box-shadow: 1px 15px 45px gainsboro;
+    width: 45%;
+    height: 570px;
+    margin-right: 40px;
+}
+
+.shr{
+    display: flex;
+    justify-content: space-between;
+}
+
+.last{
+    background-color: #222f3d;
+    height: 75px;
+    display: flex;
+    justify-content: center;
+
+}
+
+
+ @media (max-width: 768px) {
+      .nav-icon, .between, .down, .shr, .last {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .box, .box1, .box2, .container, .table_sajal {
+        width: 90%;
+        margin: 10px auto;
+      }
+
+      .button {
+        width: 90%;
+        margin: 10px auto;
+      }
+
+      .nav {
+        margin: 10px 0;
+        text-align: center;
+      }
+    }
