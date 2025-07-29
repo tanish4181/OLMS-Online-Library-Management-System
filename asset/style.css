@@ -135,6 +135,15 @@ body {
   border-radius: 18px;
 
 }
+#linkedin-link-button{
+  background-color: #00639b;
+  color: white;
+  padding: 4px;
+  margin-bottom: 5px;
+  border-radius: 18px;
+
+}
+
 #footer {
   margin-top: auto;
 }
