@@ -10,14 +10,14 @@
       rel="stylesheet"
     />
   </head>
-  <body class="user-dashboard">
+  <body>
     <!-- Navbar -->
     <nav
       class="navbar navbar-expand-lg"
       style="background: linear-gradient(to right, #6a89ec, #7e5ce4)"
     >
       <div class="container-fluid">
-        <a class="navbar-brand fw-bold text-white" href="./user_dashboard.html">OLMS</a>
+        <a class="navbar-brand fw-bold text-white" href="#">OLMS</a>
 
         <button
           class="navbar-toggler text-white"
@@ -51,50 +51,14 @@
         </div>
       </div>
     </nav>
-    <!-- welcome heading -->
-    <div class="user-dheading container">
-      <h1 class="user-dtext">Welcome to Your Dashboard!</h1>
-      <small class="user-hsmall-text"
-        >Discover thousands of books and resources at your fingertips</small
-      >
-    </div>
 
-    <!-- user details boxes -->
-    <div class="user-details-box">
-      <div class="user-dMainBox">
-        <div class="user-total-books">
-          <div class="user-numbers">
-            <h1>4</h1>
-          </div>
-          <small class="user-small-txt">total books </small>
-        </div>
-        <div class="user-regm">
-          <div class="user-numbers">
-            <h1>4</h1>
-          </div>
-          <small class="user-small-txt">registered member</small>
-        </div>
-        <div class="user-borrowig">
-          <div class="user-numbers">
-            <h1>4</h1>
-          </div>
-          <small class="user-small-txt">active borrowing</small>
-        </div>
-        <div class="user-books-categories">
-          <div class="user-numbers">
-            <h1>4</h1>
-          </div>
-          <small class="user-small-txt">categories</small>
-        </div>
-      </div>
-    </div>
 
-    <!-- search book box -->
-
-    <div class="user-search-box">
+    <!-- search box -->
+        <div class="user-search-box mt-5">
       <div class="user-internal-box">
+       
         <div class="search box">
-          <h4>search book</h4>
+          <h4>Browse books</h4>
           <form action="">
             <label class="" for=""
               ><strong> <small>Search books</small> </strong></label
@@ -123,14 +87,16 @@
         </div>
         <div class="user-srcbx-btn">
           <button>Search</button>
-          <button>Browse all</button>
+          <button> <a href="./browse_book.html\"></a> Reset </button>
+          
         </div>
       </div>
     </div>
 
-    <!-- Recently added book -->
+<!-- total books -->
+
     <div class="container-fluid col-11 ps-5 ms-5 mt-5">
-      <h1>latest books</h1>
+      <h6>Showing 9 of 9 books</h6>
     </div>
 
     <div class="user-latest-book pt-2">
@@ -189,8 +155,73 @@
           <h6>available</h6>
         </div>
       </div>
+      <div class="user-book-box">
+        <img
+          src="https://m.media-amazon.com/images/I/81eF-RxjuaL._UF1000,1000_QL80_.jpg"
+          height="260px"
+          width="190px"
+          alt=""
+        />
+        <h2>Operating system principles</h2>
+        <p>Programming / Computer Science</p>
+        <div class="user-avail">
+          <h6>available</h6>
+        </div>
+      </div>
+      <div class="user-book-box">
+        <img
+          src="https://m.media-amazon.com/images/I/81X3dFV9rgL._UF1000,1000_QL80_.jpg"
+          height="260px"
+          width="190px"
+          alt=""
+        />
+        <h2>Basic Mechanical Engineering</h2>
+        <p>Self-help / Personal Development</p>
+        <div class="user-avail">
+          <h6>available</h6>
+        </div>
+      </div>
+      <div class="user-book-box">
+        <img
+          src="https://m.media-amazon.com/images/I/711AW7I8e8L._UF1000,1000_QL80_.jpg"
+          height="260px"
+          width="190px"
+          alt=""
+        />
+        <h2>The C++</h2>
+        <p>Programming / Computer Science</p>
+        <div class="user-avail">
+          <h6>available</h6>
+        </div>
+      </div>
+      <div class="user-book-box">
+        <img
+          src="https://m.media-amazon.com/images/I/61VkoauwY1L._UF1000,1000_QL80_.jpg"
+          height="260px"
+          width="190px"
+          alt=""
+        />
+        <h2>Basic electrical Engineering</h2>
+        <p>Engineering</p>
+        <div class="user-avail">
+          <h6>available</h6>
+        </div>
+      </div>
+      <div class="user-book-box">
+        <img
+          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHEa6jNeh7YsY1pmgUlL04IzBeu1rIdqO2CQ&s"
+          height="260px"
+          width="190px"
+          alt=""
+        />
+        <h2>Basic electronics Engineering</h2>
+        <p>Engineering</p>
+        <div class="user-avail">
+          <h6>available</h6>
+        </div>
+      </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>
