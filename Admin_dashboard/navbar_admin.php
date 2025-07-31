@@ -23,19 +23,13 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <div class="collapse navbar-collapse user-dnav" id="navbarNav">
+            <div class="collapse navbar-collapse user-dnav d-flex justify-content-between align-items-center" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="./admindashboard.html">Home</a>
+                        <a class="nav-link text-white" href="/OLMS/Admin_dashboard/admindashboard.php">Dashboard</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-white" href="#">Browse Books</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="#">My Books</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="/OLMS/Admin_dashboard/admindashboard.php">Dashboard</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-white" href="#">Manage books</a>
@@ -43,13 +37,11 @@
                     <li class="nav-item">
                         <a class="nav-link text-white" href="/olms/Admin_dashboard/Manage_user.php">Manage users</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="#">About</a>
-                    </li>
-                    <li class="nav-item">
-                        <button class="btn btn-secondary">Logout</button>
-                    </li>
                 </ul>
+                <div class="logout-button">
+                    <button class="btn btn-secondary">Logout</button>
+
+                </div>
             </div>
         </div>
     </nav>
