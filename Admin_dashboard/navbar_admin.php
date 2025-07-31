@@ -26,13 +26,13 @@
             <div class="collapse navbar-collapse user-dnav d-flex justify-content-between align-items-center" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
+                        <a class="nav-link text-white" href="./admindashboard.php">Home</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link text-white" href="/OLMS/Admin_dashboard/admindashboard.php">Dashboard</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="#">Browse Books</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="#">Manage books</a>
+                        <a class="nav-link text-white" href="Manage_books.php">Manage books</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-white" href="/olms/Admin_dashboard/Manage_user.php">Manage users</a>

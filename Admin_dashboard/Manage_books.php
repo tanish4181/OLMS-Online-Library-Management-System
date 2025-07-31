@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="../asset/style.css" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+
+    <?php
+    include("navbar_admin.php");
+    ?>
+    <div class="mBook-main-box">
+      <div
+        style="display: flex; justify-content: space-between"
+        class="mbook-heading"
+      >
+        <h1>Manage Books</h1>
+        <div>
+          <a href="./add_book.html"
+            ><button class="btn btn-danger">add Book</button></a
+          >
+        </div>
+      </div>
+      <div class="mbook-table">
+        <table class="user-table">
+          <thead>
+            <tr class="user-thead-row">
+              <th>Title</th>
+              <th>Author</th>
+              <th>Quantity</th>
+              <th>Available</th>
+              <th>Category</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="user-tbody-row">
+              <td>book1</td>
+              <td>nameA1</td>
+              <td>4</td>
+
+              <td>2</td>
+              <td>category</td>
+              <td>
+                <button style="background-color: #dc3545; color: white">
+                  edit
+                </button>
+                <button style="background-color: #dc3545; color: white">
+                  delete
+                </button>
+              </td>
+            </tr>
+            <tr class="user-tbody-row">
+              <td>book1</td>
+              <td>nameA1</td>
+              <td>4</td>
+
+              <td>2</td>
+              <td>category</td>
+              <td>
+                <button style="background-color: #dc3545; color: white">
+                  edit
+                </button>
+                <button style="background-color: #dc3545; color: white">
+                  delete
+                </button>
+              </td>
+            </tr>
+            <tr class="user-tbody-row">
+              <td>book1</td>
+              <td>nameA1</td>
+              <td>4</td>
+
+              <td>2</td>
+              <td>category</td>
+              <td>
+                <button style="background-color: #dc3545; color: white">
+                  edit
+                </button>
+                <button style="background-color: #dc3545; color: white">
+                  delete
+                </button>
+              </td>
+            </tr>
+            <tr class="user-tbody-row">
+              <td>book1</td>
+              <td>nameA1</td>
+              <td>4</td>
+
+              <td>2</td>
+              <td>category</td>
+              <td>
+                <button style="background-color: #dc3545; color: white">
+                  edit
+                </button>
+                <button style="background-color: #dc3545; color: white">
+                  delete
+                </button>
+              </td>
+            </tr>
+            <tr class="user-tbody-row">
+              <td>book1</td>
+              <td>nameA1</td>
+              <td>4</td>
+
+              <td>2</td>
+              <td>category</td>
+              <td>
+                <button style="background-color: #dc3545; color: white">
+                  edit
+                </button>
+                <button style="background-color: #dc3545; color: white">
+                  delete
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
