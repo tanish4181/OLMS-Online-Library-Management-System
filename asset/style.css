@@ -480,7 +480,7 @@ margin-top: 38px;
   align-items: center;
   justify-content: center;
   align-items: center;
-  border: 1px solid black;
+  
   height: 100vh;
 
 }
@@ -491,7 +491,7 @@ margin-top: 38px;
 
 
 .adding-box{
-  border: 1px solid;
+  
   height: 80vh;
   width: 40%;
   margin: 20px;
