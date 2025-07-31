@@ -11,24 +11,26 @@
     />
   </head>
   <body class="addUser">
-        <!-- <?php
+    <?php
     include("navbar_admin.php");
-    ?> -->
-    <div class="add_user-box">
-      <h1>Add user</h1>
+    ?>
+    <div class="add_user-box" style="height: 120vh;">
+      <h1>Add book</h1>
       <div class="adU-flx">
         <form class="form-control m-2 p-2" action="">
-          <label for="" class="m-2"><strong>username*</strong></label>
+          <label for="" class="m-2"><strong>Title*</strong></label>
           <input type="text" class="form-control" />
-          <label for="" class="m-2"> <strong>email*</strong> </label>
+          <label for="" class="m-2"><Strong>Cover page*</Strong></label>
+          <input type="file" class="form-control">
+          <label for="" class="m-2"> <strong>Author*</strong> </label>
           <input type="text" class="form-control" />
-          <label for="" class="m-2"> <strong>Fullname*</strong> </label>
-          <input type="text" class="form-control" />
-          <label for="" class="m-2"> <strong>Address*</strong> </label>
-          <textarea name="" class="form-control"></textarea>
-          <label for="" class="m-2"><strong>Password*</strong></label>
+          <label for="" class="m-2"><strong>category*</strong></label>
           <input type="password" class="form-control mb-2" />
-          <button class="btn btn-warning form-control mt-2" >add user </button>
+          <label for="" class="m-2"> <strong>Quantity*</strong> </label>
+          <input type="text" class="form-control" />
+          <label for="" class="m-2"> <strong>Description*</strong> </label>
+          <textarea name="" class="form-control mb-2"></textarea>
+          <button class="btn btn-success form-control mx-2">add book</button>
         </form>
       </div>
     </div>

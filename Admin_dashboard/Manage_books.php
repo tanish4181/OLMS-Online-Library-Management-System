@@ -11,6 +11,10 @@
     />
   </head>
   <body>
+
+    <?php
+    include("navbar_admin.php");
+    ?>
     <div class="mBook-main-box">
       <div
         style="display: flex; justify-content: space-between"

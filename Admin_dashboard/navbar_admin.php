@@ -32,7 +32,7 @@
                         <a class="nav-link text-white" href="/OLMS/Admin_dashboard/admindashboard.php">Dashboard</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="./Manage_books.html">Manage books</a>
+                        <a class="nav-link text-white" href="Manage_books.php">Manage books</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-white" href="/olms/Admin_dashboard/Manage_user.php">Manage users</a>
