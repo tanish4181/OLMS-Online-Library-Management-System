@@ -470,3 +470,33 @@ margin-top: 38px;
 .admin-table td button:hover {
   background-color: #45a049;
 }
+
+
+/* add user */
+
+.add_user-box{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid black;
+  height: 100vh;
+
+}
+.adU-flx{
+  width: 400px;
+  margin: 20px;
+}
+
+
+.adding-box{
+  border: 1px solid;
+  height: 80vh;
+  width: 40%;
+  margin: 20px;
+}
+
+.addUser{
+  background-color: #f8f9fa;
+}
