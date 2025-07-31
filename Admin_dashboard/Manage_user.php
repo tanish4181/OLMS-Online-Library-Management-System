@@ -21,7 +21,7 @@
       style="display: flex; justify-content: space-between"
       class="mbook-heading">
       <h1>Manage users</h1>
-      <div> <a href="./add_user.html"><button class="btn btn-danger"> add user</button></a> </div>
+      <div> <a href="./add_user.php"><button class="btn btn-danger"> add user</button></a> </div>
     </div>
     <div class="mbook-table">
       <table class="user-table">

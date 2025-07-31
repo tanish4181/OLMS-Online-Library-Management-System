@@ -22,7 +22,7 @@
       >
         <h1>Manage Books</h1>
         <div>
-          <a href="./add_book.html"
+          <a href="./add_book.php"
             ><button class="btn btn-danger">add Book</button></a
           >
         </div>
