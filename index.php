@@ -16,7 +16,7 @@
   <?php
     include("navbar.php");
     ?>
-    <?php echo password_hash("admin123", PASSWORD_DEFAULT); ?>
+  
     <!-- Heading -->
     <div class="text-center py-4 text-white home-heading">
       <h1 class="fw-bold">OLMS – Your Digital Library Portal</h1>
