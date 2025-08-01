@@ -1,52 +1,83 @@
+<?php
+session_start();
+
+$success = $error = "";
+
+// Include database connection
+require("../database/config.php"); 
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Collect data from form
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+
+    // Check if user exists
+    $sql = "SELECT * FROM users WHERE email = '$email'";
+    $result = mysqli_query($conn, $sql);
+
+    if ($result && mysqli_num_rows($result) == 1) {
+        $user = mysqli_fetch_assoc($result);
+
+        // Check password
+        if (password_verify($password, $user['password'])) {
+            $_SESSION['username'] = $user['username'];
+            $_SESSION['role'] = 'user'; 
+
+            $success = "Login successful! Redirecting...";
+            header("refresh:2; url=../dashboard/user_dashboard.php"); 
+            exit();
+        } else {
+            $error = "Invalid password!";
+        }
+    } else {
+        $error = "User not found!";
+    }
+
+    mysqli_close($conn);
+}
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Document</title>
-
-  <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
-    rel="stylesheet" />
+  <title>User Login</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
   <link rel="stylesheet" href="/OLMS/asset/style.css" />
-
 </head>
 
 <body>
-  <!-- navbar -->
-  <?php
-  include("../navbar.php");
-  ?>
+  <?php include("../navbar.php"); ?>
   <section class="bg"></section>
-  <section class="to-check">
 
-    <!-- login box -->
+  <section class="to-check">
     <div class="form-box">
       <div class="content">
         <div id="user-login-heading">
-          <h3> <i class="bi bi-shield-lock me-2"></i>User Login</h3>
+          <h3><i class="bi bi-shield-lock me-2"></i>User Login</h3>
         </div>
 
+        <?php if ($success): ?>
+          <div class="alert alert-success"><?= $success ?></div>
+        <?php elseif ($error): ?>
+          <div class="alert alert-danger"><?= $error ?></div>
+        <?php endif; ?>
+
         <div class="form">
-          <form class="" action="" method="post">
-            <label class="my-2 mt-1" for="exampleInputEmail1">Email address</label>
-            <input
-              type="email"
-              class="form-control"
-              id="exampleInputEmail1"
-              aria-describedby="emailHelp"
-              placeholder="Enter email" />
-            <label class="my-2" for="exampleInputPassword1">Password</label>
-            <input
-              type="password"
-              class="form-control"
-              id="exampleInputPassword1"
-              placeholder="Password" />
-            <button type="submit" class="user-btn btn-primary mt-3">
-              <i class="bi-shield-check me-2"></i></i>User Login
+          <form action="" method="post">
+            <label class="my-2 mt-1" for="email">Email address</label>
+            <input type="email" name="email" class="form-control" required placeholder="Enter email" />
+
+            <label class="my-2" for="password">Password</label>
+            <input type="password" name="password" class="form-control" required placeholder="Password" />
+
+            <button type="submit" class="user-btn btn btn-primary mt-3">
+              <i class="bi-shield-check me-2"></i>User Login
             </button>
           </form>
         </div>
@@ -54,5 +85,4 @@
     </div>
   </section>
 </body>
-
 </html>
