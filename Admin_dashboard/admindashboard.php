@@ -29,19 +29,19 @@
         <div class="user-numbers">
           <h1 style="color: #dc3545;">4</h1>
         </div>
-        <small class="user-small-txt">total books </small>
+        <small class="user-small-txt">Total Books </small>
       </div>
       <div class="user-regm">
         <div class="user-numbers">
           <h1 style="color: red;">4</h1>
         </div>
-        <small class="user-small-txt">registered member</small>
+        <small class="user-small-txt">Registered Member</small>
       </div>
       <div class="user-borrowig">
         <div class="user-numbers">
           <h1 style="color: #dc3545;">4</h1>
         </div>
-        <small class="user-small-txt">active borrowing</small>
+        <small class="user-small-txt">Active Borrowing</small>
       </div>
       <div class="user-books-categories">
         <div class="user-numbers">
@@ -59,17 +59,17 @@
         <div class="user-numbers">
           <h1 style="color: #dc3545;">4</h1>
         </div>
-        <small class="user-small-txt">categories</small>
+        <small class="user-small-txt">Categories</small>
       </div>
     </div>
   </div>
   <div class="container">
     <h2>Quick Actions</h2>
     <div class="admin-action">
-      <button class="admin-aBtn">Add new Book</button>
-      <button class="admin-aBtn">Add new User</button>
-      <button class="admin-aBtn">Manage categories</button>
-      <button class="admin-aBtn">View all borrowing</button>
+      <button class="admin-aBtn">Add New Book</button>
+      <button class="admin-aBtn">Add New User</button>
+      <button class="admin-aBtn">Manage Categories</button>
+      <button class="admin-aBtn">View All Borrowing</button>
     </div>
   </div>
   <div class="container">
@@ -80,10 +80,10 @@
           <thead>
             <tr class="user-thead-row">
               <th>Member</th>
-              <th>book</th>
+              <th>Book</th>
               <th>Borrow date</th>
               <th>Duedate</th>
-              <th>status</th>
+              <th>Status</th>
             </tr>
           </thead>
           <tbody>
@@ -122,7 +122,7 @@
         </table>
       </div>
       <div class="overdue-books">
-        <h2 class="admin-action-heading">Overdue book</h2>
+        <h2 class="admin-action-heading">Overdue Book</h2>
       </div>
     </div>
   </div>
