@@ -37,8 +37,8 @@ This is a simple web-based Online Library Management System built using **HTML, 
 
 ## 👨‍💻 Admin Login (Default)
 
-- **Email**: admin@example.com  
-- **Password**: admin123  
+- **Email**: admin@olms
+- **Password**: 12345
 
 *(You can change this in the database manually.)*
 
