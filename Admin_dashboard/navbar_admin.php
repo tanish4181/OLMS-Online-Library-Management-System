@@ -39,7 +39,7 @@
                     </li>
                 </ul>
                 <div class="logout-button">
-                    <button class="btn btn-secondary">Logout</button>
+                    <a href="../logout.php"><button class="btn btn-secondary"> Logout </button></a>
 
                 </div>
             </div>
