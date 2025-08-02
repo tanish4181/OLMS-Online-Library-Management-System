@@ -11,11 +11,11 @@ $message = "";
 // Check if the form was submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Get the email and password from the form
-    $email = $_POST["email"];
+    $email = mysqli_real_escape_string($conn, $_POST["email"]);
     $passwordInput = $_POST["password"];
 
-    // Create SQL query to find admin with this email
-    $sql = "SELECT * FROM admin WHERE email = '$email'";
+    // Create SQL query to find user with this email and admin role
+    $sql = "SELECT * FROM users WHERE email = '$email' AND role = 'admin'";
     $result = mysqli_query($conn, $sql);
 
     // Check if we found an admin with this email
@@ -27,16 +27,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (password_verify($passwordInput, $admin["password"])) {
             // Password is correct, so log the admin in
             $_SESSION["admin_logged_in"] = true;
-            $_SESSION["sta"] = $email;
+            $_SESSION["admin_id"] = $admin["id"];
+            $_SESSION["admin_email"] = $admin["email"];
+            $_SESSION["admin_name"] = $admin["fullname"];
+            $_SESSION["sta"] = $email; // Keep for backward compatibility
             header("Location: /olms/Admin_dashboard/admindashboard.php");
             exit();
         } else {
             // Password is wrong
-            $message = "Incorrect password check again";
+            $message = "Incorrect password. Please check again.";
         }
     } else {
-        // No admin found with this email
-        $message = "Admin not found.";
+        // No admin found with this email or user is not an admin
+        $message = "Admin access denied. Invalid credentials or insufficient privileges.";
     }
 
     // Close the database connection
