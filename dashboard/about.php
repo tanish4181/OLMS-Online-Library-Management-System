@@ -44,7 +44,7 @@
                   <i class="fab fa-github"></i>GitHub
                   </button
               ></a>
-              <a href="https://github.com/tanish418"
+              <a href="https://www.linkedin.com/in/tanish-sharma-ts4181/"
                 ><button id="linkedin-link-button">
                   <i class="fa-brands fa-linkedin-in"></i>Linkedin
                 </button></a
@@ -64,12 +64,12 @@
             <p class="text-muted"></p>
             <p class="small"></p>
             <div>
-              <a href="https://github.com/tanish418"
+              <a href="https://github.com/Mehulsuthar817"
                 ><button id="github-link-button">
                   <i class="fab fa-github"></i>GitHub
                   </button
               ></a>
-              <a href="https://github.com/tanish418"
+              <a href="https://www.linkedin.com/in/mehul-suthar-aabb82298"
                 ><button id="linkedin-link-button">
                   <i class="fa-brands fa-linkedin-in"></i>Linkedin
                 </button></a
@@ -89,12 +89,12 @@
             <p class="text-muted"></p>
             <p class="small"></p>
             <div>
-              <a href="https://github.com/tanish418"
+              <a href="https://github.com/sajalsinghal2005"
                 ><button id="github-link-button">
                   <i class="fab fa-github"></i>GitHub
                   </button
               ></a>
-              <a href="https://github.com/tanish418"
+              <a href="https://www.linkedin.com/in/sajal-singhal-446002318?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"
                 ><button id="linkedin-link-button">
                   <i class="fa-brands fa-linkedin-in"></i>Linkedin
                 </button></a
@@ -116,12 +116,12 @@
             <p class="text-muted"></p>
             <p class="small"></p>
             <div>
-              <a href="https://github.com/tanish418"
+              <a href="#"
                 ><button id="github-link-button">
                   <i class="fab fa-github"></i>GitHub
                   </button
               ></a>
-              <a href="https://github.com/tanish418"
+              <a href="#"
                 ><button id="linkedin-link-button">
                   <i class="fa-brands fa-linkedin-in"></i>Linkedin
                 </button></a
