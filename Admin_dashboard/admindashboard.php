@@ -1,12 +1,90 @@
 <?php
-include("config.php");
+session_start();
 
-$query = "SELECT COUNT(*) as total FROM books";
-$result = mysqli_query($conn, $query);
-$data = mysqli_fetch_assoc($result);
-$totalBooks = $data['total'];
+// Initialize variables with default values
+$total_users = 0;
+$total_admins = 0;
+$total_all_users = 0;
+$total_books = 0;
+$borrowed_books = 0;
+$db_connected = false;
+$error_message = "";
+
+// Try to connect to database
+try {
+    include('../database/config.php');
+    $db_connected = true;
+    
+    // Count total members (only users, not admins)
+    $sql = "SELECT COUNT(*) as total_users FROM users WHERE role = 'user'";
+    $result = mysqli_query($conn, $sql);
+    if ($result) {
+        $data = mysqli_fetch_assoc($result);
+        $total_users = $data['total_users'];
+    }
+
+    // Count total admins
+    $sql_admin = "SELECT COUNT(*) as total_admins FROM users WHERE role = 'admin'";
+    $result_admin = mysqli_query($conn, $sql_admin);
+    if ($result_admin) {
+        $data_admin = mysqli_fetch_assoc($result_admin);
+        $total_admins = $data_admin['total_admins'];
+    }
+
+    // Count total users (both users and admins)
+    $sql_total = "SELECT COUNT(*) as total_all_users FROM users";
+    $result_total = mysqli_query($conn, $sql_total);
+    if ($result_total) {
+        $data_total = mysqli_fetch_assoc($result_total);
+        $total_all_users = $data_total['total_all_users'];
+    }
+
+    // Count total books from books table
+    $sql_books = "SELECT COUNT(*) as total_books FROM books";
+    $result_books = mysqli_query($conn, $sql_books);
+    if ($result_books) {
+        $data_books = mysqli_fetch_assoc($result_books);
+        $total_books = $data_books['total_books'];
+    }
+
+    // Count total quantity of books (sum of all book quantities)
+    $sql_total_quantity = "SELECT SUM(quantity) as total_quantity FROM books";
+    $result_quantity = mysqli_query($conn, $sql_total_quantity);
+    if ($result_quantity) {
+        $data_quantity = mysqli_fetch_assoc($result_quantity);
+        $total_quantity = $data_quantity['total_quantity'] ? $data_quantity['total_quantity'] : 0;
+    }
+
+    // Count borrowed books (for now, we'll set this to 0 since borrowings table doesn't exist yet)
+    $borrowed_books = 0;
+    
+    // Check if borrowings table exists and count borrowed books
+    $check_borrowing_table = "SHOW TABLES LIKE 'borrowings'";
+    $borrowing_table_exists = mysqli_query($conn, $check_borrowing_table);
+    if ($borrowing_table_exists && mysqli_num_rows($borrowing_table_exists) > 0) {
+        $sql_borrowed = "SELECT COUNT(*) as borrowed_books FROM borrowings WHERE status = 'borrowed'";
+        $result_borrowed = mysqli_query($conn, $sql_borrowed);
+        if ($result_borrowed) {
+            $data_borrowed = mysqli_fetch_assoc($result_borrowed);
+            $borrowed_books = $data_borrowed['borrowed_books'];
+        }
+    }
+
+    // Get recent books for display
+    $sql_recent_books = "SELECT * FROM books ORDER BY id DESC LIMIT 4";
+    $result_recent = mysqli_query($conn, $sql_recent_books);
+    $recent_books = [];
+    if ($result_recent) {
+        while ($row = mysqli_fetch_assoc($result_recent)) {
+            $recent_books[] = $row;
+        }
+    }
+
+} catch (Exception $e) {
+    $db_connected = false;
+    $error_message = "Database connection failed. Please ensure MySQL server is running.";
+}
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -14,7 +92,7 @@ $totalBooks = $data['total'];
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Document</title>
+  <title>Admin Dashboard - OLMS</title>
   <link
     href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
     rel="stylesheet" />
@@ -25,56 +103,138 @@ $totalBooks = $data['total'];
   <?php
   include("navbar_admin.php");
   ?>
+
   <!-- welcome heading -->
   <div class="user-dheading">
-    <h1 style="color: #dc3545;" class="user-dtext">Welcome Library Adminstrator</h1>
+    <h1 style="color: #dc3545;" class="user-dtext">Welcome Library Administrator</h1>
     <small class="user-hsmall-text">Discover thousands of books and resources at your fingertips</small>
   </div>
+
+  <!-- Database Connection Status -->
+  <?php if (!$db_connected): ?>
+  <div class="container" style="margin-bottom: 20px;">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="alert alert-danger" style="text-align: center;">
+          <strong>⚠️ Database Connection Error:</strong><br>
+          <?php echo isset($error_message) ? $error_message : 'Unable to connect to database.'; ?><br>
+          <small>Please start your MySQL server in XAMPP Control Panel.</small>
+        </div>
+      </div>
+    </div>
+  </div>
+  <?php endif; ?>
+
+  <!-- User Statistics Summary -->
+  <?php if ($db_connected): ?>
+  <div class="container" style="margin-bottom: 20px;">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="alert alert-info" style="text-align: center;">
+          <strong>📊 System Statistics Summary:</strong> 
+          Total Users: <span class="badge bg-primary"><?php echo $total_all_users; ?></span> | 
+          Regular Members: <span class="badge bg-success"><?php echo $total_users; ?></span> | 
+          Administrators: <span class="badge bg-warning"><?php echo $total_admins; ?></span>
+          <?php if ($total_books > 0): ?>
+          | Total Books: <span class="badge bg-info"><?php echo $total_books; ?></span>
+          | Total Copies: <span class="badge bg-info"><?php echo isset($total_quantity) ? $total_quantity : 0; ?></span>
+          <?php endif; ?>
+          <?php if ($borrowed_books > 0): ?>
+          | Borrowed Books: <span class="badge bg-secondary"><?php echo $borrowed_books; ?></span>
+          <?php endif; ?>
+        </div>
+      </div>
+    </div>
+  </div>
+  <?php endif; ?>
 
   <!-- user details boxes -->
   <div class="user-details-box">
     <div class="user-dMainBox">
       <div class="user-total-books">
         <div class="user-numbers">
-          <h1 style="color: #dc3545;"><?php echo $totalBooks; ?></h1>
+          <h1 style="color: #dc3545;"><?php echo $db_connected ? $total_books : 'N/A'; ?></h1>
         </div>
-
-        <small class="user-small-txt">total books</small>
-
+        <small class="user-small-txt">Total Books</small>
       </div>
-
+      
       <div class="user-regm">
         <div class="user-numbers">
-          <h1 style="color: red;">4</h1>
+          <h1 style="color: red;"><?php echo $db_connected ? $total_users : 'N/A'; ?></h1>
         </div>
-        <small class="user-small-txt">Registered Member</small>
+        <small class="user-small-txt">Registered Members</small>
       </div>
+      
       <div class="user-borrowig">
         <div class="user-numbers">
-          <h1 style="color: #dc3545;">4</h1>
+          <h1 style="color: #dc3545;"><?php echo $db_connected ? (isset($total_quantity) ? $total_quantity : 0) : 'N/A'; ?></h1>
         </div>
-        <small class="user-small-txt">Active Borrowing</small>
+        <small class="user-small-txt">Total Copies</small>
       </div>
+      
       <div class="user-books-categories">
         <div class="user-numbers">
-          <h1 style="color: #dc3545;">4</h1>
+          <h1 style="color: #28a745;"><?php echo $db_connected ? $borrowed_books : 'N/A'; ?></h1>
         </div>
-        <small class="user-small-txt">Unavailable Books</small>
+        <small class="user-small-txt">Borrowed Books</small>
       </div>
+      
       <div class="user-books-categories">
         <div class="user-numbers">
-          <h1 style="color: #dc3545;">4</h1>
+          <h1 style="color: #ffc107;"><?php echo $db_connected ? $total_admins : 'N/A'; ?></h1>
         </div>
-        <small class="user-small-txt">Overdue Books</small>
+        <small class="user-small-txt">Administrators</small>
       </div>
+      
       <div class="user-books-categories">
         <div class="user-numbers">
-          <h1 style="color: #dc3545;">4</h1>
+          <h1 style="color: #17a2b8;"><?php echo $db_connected ? $total_all_users : 'N/A'; ?></h1>
         </div>
-        <small class="user-small-txt">Categories</small>
+        <small class="user-small-txt">Total Users</small>
       </div>
     </div>
   </div>
+
+  <!-- Book Information -->
+  <?php if ($db_connected && $total_books > 0): ?>
+  <div class="container" style="margin-bottom: 20px;">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="alert alert-success" style="text-align: center;">
+          <strong>📚 Books Database Active:</strong><br>
+          <small>Total Books: <?php echo $total_books; ?> | Total Copies: <?php echo isset($total_quantity) ? $total_quantity : 0; ?> | Borrowed: <?php echo $borrowed_books; ?></small>
+        </div>
+      </div>
+    </div>
+  </div>
+  <?php endif; ?>
+
+  <!-- Recent Books Section -->
+  <?php if ($db_connected && !empty($recent_books)): ?>
+  <div class="container" style="margin-bottom: 20px;">
+    <h2>Recent Books in Database</h2>
+    <div class="row">
+      <?php foreach ($recent_books as $book): ?>
+      <div class="col-md-3 mb-3">
+        <div class="card">
+          <div class="card-body text-center">
+            <h6 class="card-title"><?php echo htmlspecialchars($book['title']); ?></h6>
+            <p class="card-text small">
+              <strong>Author:</strong> <?php echo htmlspecialchars($book['author']); ?><br>
+              <strong>Category:</strong> <?php echo htmlspecialchars($book['category']); ?><br>
+              <strong>Quantity:</strong> <?php echo $book['quantity']; ?>
+            </p>
+            <span class="badge bg-<?php echo $book['quantity'] > 0 ? 'success' : 'danger'; ?>">
+              <?php echo $book['quantity'] > 0 ? 'Available' : 'Out of Stock'; ?>
+            </span>
+          </div>
+        </div>
+      </div>
+      <?php endforeach; ?>
+    </div>
+  </div>
+  <?php endif; ?>
+
   <div class="container">
     <h2>Quick Actions</h2>
     <div class="admin-action">
@@ -84,6 +244,7 @@ $totalBooks = $data['total'];
       <button class="admin-aBtn">View All Borrowing</button>
     </div>
   </div>
+  
   <div class="container">
     <div class="admin-details" style="flex-wrap: wrap">
       <div class="mbook-table Recent-borrow">
@@ -94,47 +255,32 @@ $totalBooks = $data['total'];
               <th>Member</th>
               <th>Book</th>
               <th>Borrow date</th>
-              <th>Duedate</th>
+              <th>Due date</th>
               <th>Status</th>
             </tr>
           </thead>
           <tbody>
+            <?php if ($db_connected && $borrowed_books > 0): ?>
             <tr class="user-tbody-row">
-              <td>name1</td>
-              <td>book1</td>
-              <td>date</td>
-              <td>date</td>
-              <td>active</td>
-
-
+              <td>Sample User</td>
+              <td>Sample Book</td>
+              <td>2024-01-01</td>
+              <td>2024-01-15</td>
+              <td>Borrowed</td>
             </tr>
+            <?php else: ?>
             <tr class="user-tbody-row">
-              <td>name2</td>
-              <td>book2</td>
-              <td>date</td>
-              <td>date</td>
-              <td>active</td>
-
+              <td colspan="5" style="text-align: center; color: #6c757d;">No borrowings found</td>
             </tr>
-            <tr class="user-tbody-row">
-              <td>name3</td>
-              <td>book3</td>
-              <td>date</td>
-              <td>date</td>
-              <td>active</td>
-            </tr>
-            <tr class="user-tbody-row">
-              <td>name4</td>
-              <td>book4</td>
-              <td>date</td>
-              <td>date</td>
-              <td>active</td>
-            </tr>
+            <?php endif; ?>
           </tbody>
         </table>
       </div>
       <div class="overdue-books">
-        <h2 class="admin-action-heading">Overdue Book</h2>
+        <h2 class="admin-action-heading">Overdue Books</h2>
+        <div style="padding: 20px; text-align: center; color: #6c757d;">
+          No overdue books found
+        </div>
       </div>
     </div>
   </div>
