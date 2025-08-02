@@ -53,18 +53,76 @@ $result = mysqli_query($conn, $sql);
           <?php
           if (mysqli_num_rows($result) > 0) {
             while ($row = mysqli_fetch_assoc($result)) {
+              $book_id = $row['id'];
           ?>
               <tr class="user-tbody-row">
                 <td><?php echo $row['title']; ?></td>
                 <td><?php echo $row['author']; ?></td>
                 <td><?php echo $row['quantity']; ?></td>
-                <td><?php echo $row['quantity']; ?></td> <!-- You can modify if "available" is different -->
+                <td><?php echo $row['quantity']; ?></td>
                 <td><?php echo $row['category']; ?></td>
                 <td>
-                  <button style="background-color: #dc3545; color: white">edit</button>
-                  <button style="background-color: #dc3545; color: white">delete</button>
+                  <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#editModal<?php echo $book_id; ?>">Edit</button>
+                  <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal<?php echo $book_id; ?>">Delete</button>
                 </td>
               </tr>
+
+              <!--EDIT MODAL -->
+              <div class="modal fade" id="editModal<?php echo $book_id; ?>" tabindex="-1">
+                <div class="modal-dialog">
+                  <form action="edit_book.php" method="POST">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5>Edit Book</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                      </div>
+                      <div class="modal-body">
+                        <input type="hidden" name="id" value="<?php echo $book_id; ?>">
+                        <div class="mb-2">
+                          <label>Title</label>
+                          <input type="text" name="title" class="form-control" value="<?php echo $row['title']; ?>" required>
+                        </div>
+                        <div class="mb-2">
+                          <label>Author</label>
+                          <input type="text" name="author" class="form-control" value="<?php echo $row['author']; ?>" required>
+                        </div>
+                        <div class="mb-2">
+                          <label>Quantity</label>
+                          <input type="number" name="quantity" class="form-control" value="<?php echo $row['quantity']; ?>" required>
+                        </div>
+                        <div class="mb-2">
+                          <label>Category</label>
+                          <input type="text" name="category" class="form-control" value="<?php echo $row['category']; ?>" required>
+                        </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="submit" name="edit_book" class="btn btn-success">Save</button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+
+              <!--DELETE MODAL -->
+              <div class="modal fade" id="deleteModal<?php echo $book_id; ?>" tabindex="-1">
+                <div class="modal-dialog">
+                  <form action="delete_book.php" method="POST">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5>Delete Book</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                      </div>
+                      <div class="modal-body">
+                        Are you sure you want to delete "<strong><?php echo $row['title']; ?></strong>"?
+                        <input type="hidden" name="id" value="<?php echo $book_id; ?>">
+                      </div>
+                      <div class="modal-footer">
+                        <button type="submit" name="delete_book" class="btn btn-danger">Delete</button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
           <?php
             }
           } else {
@@ -72,6 +130,7 @@ $result = mysqli_query($conn, $sql);
           }
           ?>
         </tbody>
+
 
       </table>
       <?php
