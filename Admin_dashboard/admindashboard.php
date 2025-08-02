@@ -1,3 +1,13 @@
+<?php
+include("config.php");
+
+$query = "SELECT COUNT(*) as total FROM books";
+$result = mysqli_query($conn, $query);
+$data = mysqli_fetch_assoc($result);
+$totalBooks = $data['total'];
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -7,8 +17,7 @@
   <title>Document</title>
   <link
     href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-    rel="stylesheet"
-  />
+    rel="stylesheet" />
   <link rel="stylesheet" href="/OLMS/asset/style.css" />
 </head>
 
@@ -27,10 +36,11 @@
     <div class="user-dMainBox">
       <div class="user-total-books">
         <div class="user-numbers">
-          <h1 style="color: #dc3545;">4</h1>
+          <h1 style="color: #dc3545;"><?php echo $totalBooks; ?></h1>
         </div>
-        <small class="user-small-txt">total books </small>
+        <small class="user-small-txt">total books</small>
       </div>
+
       <div class="user-regm">
         <div class="user-numbers">
           <h1 style="color: red;">4</h1>
