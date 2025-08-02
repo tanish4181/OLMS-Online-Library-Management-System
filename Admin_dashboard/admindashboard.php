@@ -60,26 +60,46 @@ if ($result_quantity) {
 }
 
 // Check if borrowings table exists and count borrowed books
-   $check_borrowing_table = "SHOW TABLES LIKE 'book_issues'";
-    $borrowing_table_exists = mysqli_query($conn, $check_borrowing_table);
-    if ($borrowing_table_exists && mysqli_num_rows($borrowing_table_exists) > 0) {
-        $sql_borrowed = "SELECT COUNT(*) as borrowed_books FROM book_issues WHERE status = 'issued'";
-        $result_borrowed = mysqli_query($conn, $sql_borrowed);
-        if ($result_borrowed) {
-            $data_borrowed = mysqli_fetch_assoc($result_borrowed);
-            $borrowed_books = $data_borrowed['borrowed_books'];
-        }
+$check_borrowing_table = "SHOW TABLES LIKE 'book_issues'";
+$borrowing_table_exists = mysqli_query($conn, $check_borrowing_table);
+if ($borrowing_table_exists && mysqli_num_rows($borrowing_table_exists) > 0) {
+    $sql_borrowed = "SELECT COUNT(*) as borrowed_books FROM book_issues WHERE status = 'issued'";
+    $result_borrowed = mysqli_query($conn, $sql_borrowed);
+    if ($result_borrowed) {
+        $data_borrowed = mysqli_fetch_assoc($result_borrowed);
+        $borrowed_books = $data_borrowed['borrowed_books'];
     }
+}
 
 // Get recent books for display
 $sql_recent_books = "SELECT * FROM books ORDER BY id DESC LIMIT 4";
 $result_recent = mysqli_query($conn, $sql_recent_books);
-$recent_books = [];
+$recent_books = array();
 if ($result_recent) {
     while ($row = mysqli_fetch_assoc($result_recent)) {
         $recent_books[] = $row;
     }
 }
+
+// Get recent borrowings for the table
+$recent_borrowings_query = "SELECT bi.*, u.fullname, u.username, b.title, b.author 
+                           FROM book_issues bi 
+                           JOIN users u ON bi.user_id = u.id 
+                           JOIN books b ON bi.book_id = b.id 
+                           WHERE bi.status IN ('issued', 'overdue') 
+                           ORDER BY bi.issue_date DESC 
+                           LIMIT 5";
+$recent_borrowings_result = mysqli_query($conn, $recent_borrowings_query);
+
+// Get overdue books
+$overdue_books_query = "SELECT bi.*, u.fullname, u.username, b.title, b.author 
+                       FROM book_issues bi 
+                       JOIN users u ON bi.user_id = u.id 
+                       JOIN books b ON bi.book_id = b.id 
+                       WHERE bi.due_date < CURDATE() AND bi.status = 'issued'
+                       ORDER BY bi.due_date ASC 
+                       LIMIT 5";
+$overdue_books_result = mysqli_query($conn, $overdue_books_query);
 ?>
 
 <!DOCTYPE html>
@@ -93,6 +113,7 @@ if ($result_recent) {
     href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
     rel="stylesheet" />
   <link rel="stylesheet" href="/OLMS/asset/style.css" />
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 
 <body class="admin-dashboard">
@@ -217,10 +238,9 @@ if ($result_recent) {
   <div class="container">
     <h2>Quick Actions</h2>
     <div class="admin-action">
-      <button class="admin-aBtn">Add New Book</button>
-      <button class="admin-aBtn">Add New User</button>
-      <button class="admin-aBtn">Manage Categories</button>
-      <button class="admin-aBtn">View All Borrowing</button>
+       <a href="./add_book.php"><button class="admin-aBtn">Add New Book</button></a> 
+       <a href="./add_user.php"><button class="admin-aBtn">Add New User</button></a> 
+       <a href="./return_book.php"><button class="admin-aBtn">View All Borrowing</button></a> 
     </div>
   </div>
   
@@ -233,37 +253,76 @@ if ($result_recent) {
             <tr class="user-thead-row">
               <th>Member</th>
               <th>Book</th>
-              <th>Borrow date</th>
-              <th>Due date</th>
+              <th>Issue Date</th>
+              <th>Due Date</th>
               <th>Status</th>
             </tr>
           </thead>
           <tbody>
-            <?php if ($borrowed_books > 0): ?>
-            <tr class="user-tbody-row">
-              <td>Sample User</td>
-              <td>Sample Book</td>
-              <td>2024-01-01</td>
-              <td>2024-01-15</td>
-              <td>Borrowed</td>
-            </tr>
+            <?php if (mysqli_num_rows($recent_borrowings_result) > 0): ?>
+              <?php while ($borrowing = mysqli_fetch_assoc($recent_borrowings_result)): ?>
+              <tr class="user-tbody-row">
+                <td><?php echo htmlspecialchars($borrowing['fullname']); ?></td>
+                <td><?php echo htmlspecialchars($borrowing['title']); ?></td>
+                <td><?php echo date('M d, Y', strtotime($borrowing['issue_date'])); ?></td>
+                <td><?php echo date('M d, Y', strtotime($borrowing['due_date'])); ?></td>
+                <td>
+                  <span class="badge bg-<?php echo $borrowing['status'] == 'issued' ? 'success' : 'danger'; ?>">
+                    <?php echo ucfirst($borrowing['status']); ?>
+                  </span>
+                </td>
+              </tr>
+              <?php endwhile; ?>
             <?php else: ?>
             <tr class="user-tbody-row">
-              <td colspan="5" style="text-align: center; color: #6c757d;">No borrowings found</td>
+              <td colspan="5" style="text-align: center; color: #6c757d;">No recent borrowings found</td>
             </tr>
             <?php endif; ?>
           </tbody>
         </table>
       </div>
+      
       <div class="overdue-books">
         <h2 class="admin-action-heading">Overdue Books</h2>
+        <?php if (mysqli_num_rows($overdue_books_result) > 0): ?>
+        <table class="admin-table">
+          <thead>
+            <tr class="user-thead-row">
+              <th>Member</th>
+              <th>Book</th>
+              <th>Due Date</th>
+              <th>Days Overdue</th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php while ($overdue = mysqli_fetch_assoc($overdue_books_result)): ?>
+            <tr class="user-tbody-row">
+              <td><?php echo htmlspecialchars($overdue['fullname']); ?></td>
+              <td><?php echo htmlspecialchars($overdue['title']); ?></td>
+              <td><?php echo date('M d, Y', strtotime($overdue['due_date'])); ?></td>
+              <td>
+                <span class="badge bg-danger">
+                  <?php 
+                  $days_overdue = (strtotime(date('Y-m-d')) - strtotime($overdue['due_date'])) / (60 * 60 * 24);
+                  echo floor($days_overdue) . ' days';
+                  ?>
+                </span>
+              </td>
+            </tr>
+            <?php endwhile; ?>
+          </tbody>
+        </table>
+        <?php else: ?>
         <div style="padding: 20px; text-align: center; color: #6c757d;">
           No overdue books found
         </div>
+        <?php endif; ?>
       </div>
     </div>
   </div>
-
+  <?php
+  include("footer.php");
+  ?>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 

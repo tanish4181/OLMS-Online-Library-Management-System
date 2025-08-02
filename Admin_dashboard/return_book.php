@@ -97,6 +97,7 @@ $current_issues = mysqli_query($conn, $current_issues_query);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Return Books - Admin Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="../asset/style.css">
 </head>
 <body class="admin-dashboard">
@@ -160,7 +161,7 @@ $current_issues = mysqli_query($conn, $current_issues_query);
                                                 <?php endif; ?>
                                                 
                                                 <div class="d-flex gap-2">
-                                                    <form method="POST" style="display: inline;">
+                                                    <form method="POST" style="display: inline;" onsubmit="return confirmReturn('<?php echo htmlspecialchars($issue['fullname']); ?>', '<?php echo htmlspecialchars($issue['title']); ?>')">
                                                         <input type="hidden" name="issue_id" value="<?php echo $issue['id']; ?>">
                                                         <input type="hidden" name="book_id" value="<?php echo $issue['book_id']; ?>">
                                                         <button type="submit" name="return_book" class="btn btn-primary btn-sm">
@@ -261,7 +262,16 @@ $current_issues = mysqli_query($conn, $current_issues_query);
             </div>
         </div>
     </div>
-
+  <?php
+  include("footer.php");
+  ?>
+    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+    function confirmReturn(userName, bookTitle) {
+        return confirm(`Are you sure you want to return the book "${bookTitle}" for user "${userName}"?`);
+    }
+    </script>
 </body>
 </html>

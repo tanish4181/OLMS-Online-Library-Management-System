@@ -29,10 +29,7 @@
                         <a class="nav-link text-white" href="./admindashboard.php">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="/OLMS/Admin_dashboard/admindashboard.php">Dashboard</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="manage_books.php">Manage Books</a>
+                        <a class="nav-link text-white" href="./admin_browse_book.php">Browse Books</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-white" href="manage_users.php">Manage Users</a>

@@ -1,6 +1,6 @@
     <nav
-      class="navbar navbar-expand-lg"
-      style="background: linear-gradient(to right, #6a89ec, #7e5ce4)"
+      class="navbar navbar-expand-lg bg-primary"
+      
     >
       <div class="container-fluid">
         <a class="navbar-brand fw-bold text-white" href="./user_dashboard.php">OLMS</a>
@@ -31,7 +31,7 @@
               <a class="nav-link text-white" href="./my_books.php">My Books</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link text-white" href="../about.php">About</a>
+              <a class="nav-link text-white" href="about.php">About</a>
             </li>
             <li class="nav-item">
               <a href="../logout.php"><button class="btn btn-secondary"> Logout </button></a> 
