@@ -41,14 +41,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['search'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Search Books - OLMS</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../asset/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
 </head>
 <body class="user-dashboard">
     <!-- Include user header -->
     <?php include("./user_header.php"); ?>
     
-    <div class="container mt-4">
+    <div class="container mt-4" style="height: 54.4vh;">
         <div class="row">
             <div class="col-md-12">
                 <h2 class="mb-4">Search Books</h2>

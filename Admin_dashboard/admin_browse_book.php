@@ -25,7 +25,45 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $category = trim($_POST['category']);
         $quantity = (int)$_POST['quantity'];
         $description = trim($_POST['description']);
-        $cover = $_POST['cover'] ?: 'https://via.placeholder.com/190x260?text=Book+Cover';
+        
+        // Handle file upload for cover image
+        $cover = $_POST['current_cover']; // Keep current cover by default
+        
+        if (isset($_FILES['cover']) && $_FILES['cover']['error'] == 0) {
+            $upload_dir = '../uploads/covers/';
+            
+            // Create directory if it doesn't exist
+            if (!file_exists($upload_dir)) {
+                mkdir($upload_dir, 0777, true);
+            }
+            
+            $file_extension = strtolower(pathinfo($_FILES['cover']['name'], PATHINFO_EXTENSION));
+            $allowed_extensions = ['jpg', 'jpeg', 'png', 'gif'];
+            
+            if (in_array($file_extension, $allowed_extensions)) {
+                $new_filename = 'book_' . $book_id . '_' . time() . '.' . $file_extension;
+                $target_path = $upload_dir . $new_filename;
+                
+                if (move_uploaded_file($_FILES['cover']['tmp_name'], $target_path)) {
+                    // Delete old cover file if it exists and is not a placeholder
+                    if ($cover && $cover != 'https://via.placeholder.com/190x260?text=Book+Cover' && file_exists($cover)) {
+                        unlink($cover);
+                    }
+                    $cover = $target_path;
+                } else {
+                    $message = "Error uploading cover image.";
+                    $message_type = "warning";
+                }
+            } else {
+                $message = "Invalid file type. Please upload JPG, JPEG, PNG, or GIF files only.";
+                $message_type = "warning";
+            }
+        }
+        
+        // If no cover is set, use placeholder
+        if (empty($cover)) {
+            $cover = 'https://via.placeholder.com/190x260?text=Book+Cover';
+        }
         
         // Check if all required fields are filled
         if ($title && $author && $category && $quantity >= 0) {
@@ -56,8 +94,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $message = "Cannot delete book. It is currently issued to users.";
             $message_type = "danger";
         } else {
+            // Get book details to delete cover file
+            $book_query = "SELECT cover FROM books WHERE id = '$book_id'";
+            $book_result = mysqli_query($conn, $book_query);
+            $book_data = mysqli_fetch_assoc($book_result);
+            
             $delete_query = "DELETE FROM books WHERE id = '$book_id'";
             if (mysqli_query($conn, $delete_query)) {
+                // Delete cover file if it's not a placeholder
+                if ($book_data['cover'] && $book_data['cover'] != 'https://via.placeholder.com/190x260?text=Book+Cover' && file_exists($book_data['cover'])) {
+                    unlink($book_data['cover']);
+                }
                 $message = "Book deleted successfully!";
                 $message_type = "success";
             } else {
@@ -313,9 +360,10 @@ $stats = mysqli_fetch_assoc($stats_result);
                     <h5 class="modal-title">Edit Book</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-                <form method="POST">
+                <form method="POST" enctype="multipart/form-data">
                     <div class="modal-body">
                         <input type="hidden" name="book_id" id="editBookId">
+                        <input type="hidden" name="current_cover" id="editCurrentCover">
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
@@ -342,16 +390,22 @@ $stats = mysqli_fetch_assoc($stats_result);
                                         <option value="Academic">Academic</option>
                                     </select>
                                 </div>
-                            </div>
-                            <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="editQuantity" class="form-label">Quantity *</label>
                                     <input type="number" class="form-control" id="editQuantity" name="quantity" min="0" required>
                                 </div>
+                            </div>
+                            <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="editCover" class="form-label">Cover Image URL</label>
-                                    <input type="url" class="form-control" id="editCover" name="cover">
-                                    <small class="text-muted">Leave empty for default placeholder</small>
+                                    <label for="editCover" class="form-label">Cover Image</label>
+                                    <input type="file" class="form-control" id="editCover" name="cover" accept="image/*">
+                                    <small class="text-muted">Upload JPG, JPEG, PNG, or GIF files only. Leave empty to keep current cover.</small>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Current Cover Preview</label>
+                                    <div id="currentCoverPreview" class="border rounded p-2 text-center" style="height: 120px;">
+                                        <img id="currentCoverImg" src="" alt="Current Cover" style="max-height: 100px; max-width: 100px; object-fit: cover;">
+                                    </div>
                                 </div>
                                 <div class="mb-3">
                                     <label for="editDescription" class="form-label">Description</label>
@@ -386,8 +440,19 @@ $stats = mysqli_fetch_assoc($stats_result);
         document.getElementById('editAuthor').value = book.author;
         document.getElementById('editCategory').value = book.category;
         document.getElementById('editQuantity').value = book.quantity;
-        document.getElementById('editCover').value = book.cover;
+        document.getElementById('editCurrentCover').value = book.cover;
         document.getElementById('editDescription').value = book.description;
+        
+        // Show current cover preview
+        const currentCoverImg = document.getElementById('currentCoverImg');
+        if (book.cover && book.cover !== 'https://via.placeholder.com/190x260?text=Book+Cover') {
+            currentCoverImg.src = book.cover;
+            currentCoverImg.style.display = 'block';
+        } else {
+            currentCoverImg.src = 'https://via.placeholder.com/100x100?text=No+Cover';
+            currentCoverImg.style.display = 'block';
+        }
+        
         new bootstrap.Modal(document.getElementById('editBookModal')).show();
     }
     
@@ -397,6 +462,18 @@ $stats = mysqli_fetch_assoc($stats_result);
             document.getElementById('deleteForm').submit();
         }
     }
+    
+    // Preview selected image in edit modal
+    document.getElementById('editCover').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('currentCoverImg').src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    });
     </script>
 </body>
 </html>

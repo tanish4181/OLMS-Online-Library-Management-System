@@ -25,8 +25,9 @@ $total_books = mysqli_num_rows($books_result);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Browse Books - OLMS</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Load custom CSS FIRST, then Bootstrap CSS to avoid conflicts -->
     <link rel="stylesheet" href="../asset/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body class="user-dashboard">
     <!-- Include user header -->
@@ -92,4 +93,4 @@ $total_books = mysqli_num_rows($books_result);
     ?>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-</html> 
+</html>
