@@ -71,18 +71,18 @@ ADD CONSTRAINT `fk_issues_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`
 ADD CONSTRAINT `fk_issues_book` FOREIGN KEY (`book_id`) REFERENCES `books` (`id`) ON DELETE CASCADE;
 
 -- Insert sample admin user
--- Password: password (hashed with bcrypt)
+-- Password: 12345 (hashed with bcrypt)
 INSERT INTO `admin` (`fullname`, `email`, `password`) VALUES
-('Library Admin', 'admin@library.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi');
+('Library Admin', 'admin@library.com', '$2y$10$4Tmjd3Ay.V2XPpBj4pXBz.vjX/On2ntm.5AmG2oV.eEfBfH4TtUTu');
 
 -- Insert sample users
--- Password: password (hashed with bcrypt)
+-- Password: 12345 (hashed with bcrypt)
 INSERT INTO `users` (`fullname`, `username`, `email`, `password`, `address`, `role`) VALUES
-('John Doe', 'john_doe', 'john@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', '123 Main St, City', 'user'),
-('Jane Smith', 'jane_smith', 'jane@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', '456 Oak Ave, Town', 'user'),
-('Bob Johnson', 'bob_johnson', 'bob@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', '789 Pine Rd, Village', 'user'),
-('Alice Brown', 'alice_brown', 'alice@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', '321 Elm St, Borough', 'user'),
-('Charlie Wilson', 'charlie_wilson', 'charlie@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', '654 Maple Dr, County', 'user');
+('John Doe', 'john_doe', 'john@example.com', '$2y$10$4Tmjd3Ay.V2XPpBj4pXBz.vjX/On2ntm.5AmG2oV.eEfBfH4TtUTu', '123 Main St, City', 'user'),
+('Jane Smith', 'jane_smith', 'jane@example.com', '$2y$10$4Tmjd3Ay.V2XPpBj4pXBz.vjX/On2ntm.5AmG2oV.eEfBfH4TtUTu', '456 Oak Ave, Town', 'user'),
+('Bob Johnson', 'bob_johnson', 'bob@example.com', '$2y$10$4Tmjd3Ay.V2XPpBj4pXBz.vjX/On2ntm.5AmG2oV.eEfBfH4TtUTu', '789 Pine Rd, Village', 'user'),
+('Alice Brown', 'alice_brown', 'alice@example.com', '$2y$10$4Tmjd3Ay.V2XPpBj4pXBz.vjX/On2ntm.5AmG2oV.eEfBfH4TtUTu', '321 Elm St, Borough', 'user'),
+('Charlie Wilson', 'charlie_wilson', 'charlie@example.com', '$2y$10$4Tmjd3Ay.V2XPpBj4pXBz.vjX/On2ntm.5AmG2oV.eEfBfH4TtUTu', '654 Maple Dr, County', 'user');
 
 -- Insert sample books
 INSERT INTO `books` (`title`, `cover`, `author`, `category`, `quantity`, `description`) VALUES
