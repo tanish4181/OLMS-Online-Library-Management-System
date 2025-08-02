@@ -1,23 +1,39 @@
 <?php
 session_start();
-$standardEmail = "admin@olms";
-$standardPassword = "12345";
+require_once("../database/config.php");
+
 $message = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST["email"] ?? '';
     $passwordInput = $_POST["password"] ?? '';
 
-    if ($email === $standardEmail && $passwordInput === $standardPassword) {
-        $_SESSION["admin_logged_in"] = true;
-        $_SESSION["sta"] = $email;
-        header("Location: /olms/Admin_dashboard/admindashboard.php");
-        exit();
+    $stmt = $conn->prepare("SELECT * FROM admin WHERE email = ?");
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows === 1) {
+        $admin = $result->fetch_assoc();
+
+        if (password_verify($passwordInput, $admin["password"])) {
+            $_SESSION["admin_logged_in"] = true;
+            $_SESSION["sta"] = $email;
+            header("Location: /olms/Admin_dashboard/admindashboard.php");
+            exit();
+        } else {
+            $message = "Incorrect password check again";
+        }
     } else {
-        $message = "Invalid id or password";
+        $message = "Admin not found.";
     }
+
+    $stmt->close();
+    $conn->close();
 }
 ?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 

@@ -26,7 +26,7 @@ $totalBooks = $data['total'];
   include("navbar_admin.php");
   ?>
   <!-- welcome heading -->
-  <div class="user-dheading container">
+  <div class="user-dheading">
     <h1 style="color: #dc3545;" class="user-dtext">Welcome Library Adminstrator</h1>
     <small class="user-hsmall-text">Discover thousands of books and resources at your fingertips</small>
   </div>
@@ -38,20 +38,22 @@ $totalBooks = $data['total'];
         <div class="user-numbers">
           <h1 style="color: #dc3545;"><?php echo $totalBooks; ?></h1>
         </div>
+
         <small class="user-small-txt">total books</small>
+
       </div>
 
       <div class="user-regm">
         <div class="user-numbers">
           <h1 style="color: red;">4</h1>
         </div>
-        <small class="user-small-txt">registered member</small>
+        <small class="user-small-txt">Registered Member</small>
       </div>
       <div class="user-borrowig">
         <div class="user-numbers">
           <h1 style="color: #dc3545;">4</h1>
         </div>
-        <small class="user-small-txt">active borrowing</small>
+        <small class="user-small-txt">Active Borrowing</small>
       </div>
       <div class="user-books-categories">
         <div class="user-numbers">
@@ -69,17 +71,17 @@ $totalBooks = $data['total'];
         <div class="user-numbers">
           <h1 style="color: #dc3545;">4</h1>
         </div>
-        <small class="user-small-txt">categories</small>
+        <small class="user-small-txt">Categories</small>
       </div>
     </div>
   </div>
   <div class="container">
     <h2>Quick Actions</h2>
     <div class="admin-action">
-      <button class="admin-aBtn">Add new Book</button>
-      <button class="admin-aBtn">Add new User</button>
-      <button class="admin-aBtn">Manage categories</button>
-      <button class="admin-aBtn">View all borrowing</button>
+      <button class="admin-aBtn">Add New Book</button>
+      <button class="admin-aBtn">Add New User</button>
+      <button class="admin-aBtn">Manage Categories</button>
+      <button class="admin-aBtn">View All Borrowing</button>
     </div>
   </div>
   <div class="container">
@@ -90,10 +92,10 @@ $totalBooks = $data['total'];
           <thead>
             <tr class="user-thead-row">
               <th>Member</th>
-              <th>book</th>
+              <th>Book</th>
               <th>Borrow date</th>
               <th>Duedate</th>
-              <th>status</th>
+              <th>Status</th>
             </tr>
           </thead>
           <tbody>
@@ -132,7 +134,7 @@ $totalBooks = $data['total'];
         </table>
       </div>
       <div class="overdue-books">
-        <h2 class="admin-action-heading">Overdue book</h2>
+        <h2 class="admin-action-heading">Overdue Book</h2>
       </div>
     </div>
   </div>
