@@ -1,4 +1,5 @@
 <?php
+// Start the session to check if user is logged in
 session_start();
 
 // Check if user is logged in
@@ -7,13 +8,14 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'user') {
     exit();
 }
 
+// Include the database connection file
 include("../database/config.php");
 
-// Get all books from database
+// Get all books from the database
 $books_query = "SELECT * FROM books ORDER BY title";
 $books_result = mysqli_query($conn, $books_query);
 
-// Count total books
+// Count how many books we have
 $total_books = mysqli_num_rows($books_result);
 ?>
 

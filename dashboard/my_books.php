@@ -1,4 +1,5 @@
 <?php
+// Start the session to check if user is logged in
 session_start();
 
 // Check if user is logged in
@@ -7,9 +8,13 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'user') {
     exit();
 }
 
+// Include the database connection file
 include("../database/config.php");
+
+// Include the fine calculator file
 include("../includes/fine_calculator.php");
 
+// Get the user ID from the session
 $user_id = $_SESSION['user_id'];
 
 // Update all fines first (for display purposes only)
@@ -19,24 +24,18 @@ updateAllFines($conn);
 $current_issues_query = "SELECT bi.*, b.title, b.author, b.cover 
                         FROM book_issues bi 
                         JOIN books b ON bi.book_id = b.id 
-                        WHERE bi.user_id = ? AND bi.status IN ('issued', 'overdue') 
+                        WHERE bi.user_id = '$user_id' AND bi.status IN ('issued', 'overdue') 
                         ORDER BY bi.issue_date DESC";
-$stmt = mysqli_prepare($conn, $current_issues_query);
-mysqli_stmt_bind_param($stmt, "i", $user_id);
-mysqli_stmt_execute($stmt);
-$current_issues = mysqli_stmt_get_result($stmt);
+$current_issues = mysqli_query($conn, $current_issues_query);
 
 // Get user's book history (returned books)
 $book_history_query = "SELECT bi.*, b.title, b.author, b.cover 
                       FROM book_issues bi 
                       JOIN books b ON bi.book_id = b.id 
-                      WHERE bi.user_id = ? AND bi.status = 'returned' 
+                      WHERE bi.user_id = '$user_id' AND bi.status = 'returned' 
                       ORDER BY bi.return_date DESC 
                       LIMIT 20";
-$stmt = mysqli_prepare($conn, $book_history_query);
-mysqli_stmt_bind_param($stmt, "i", $user_id);
-mysqli_stmt_execute($stmt);
-$book_history = mysqli_stmt_get_result($stmt);
+$book_history = mysqli_query($conn, $book_history_query);
 ?>
 
 <!DOCTYPE html>

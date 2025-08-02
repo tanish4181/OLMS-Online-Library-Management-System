@@ -1,43 +1,53 @@
 <?php
+// Start the session to store user data
 session_start();
 
-$success = $error = "";
+// Variables to store success and error messages
+$success = "";
+$error = "";
 
-// Include database connection
+// Include the database connection file
 require("../database/config.php"); 
 
+// Check if the form was submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Collect data from form
+    // Get the email and password from the form
     $email = $_POST['email'];
     $password = $_POST['password'];
 
-    // Check if user exists
+    // Create SQL query to find user with this email
     $sql = "SELECT * FROM users WHERE email = '$email'";
     $result = mysqli_query($conn, $sql);
 
+    // Check if we found a user with this email
     if ($result && mysqli_num_rows($result) == 1) {
+        // Get the user data
         $user = mysqli_fetch_assoc($result);
 
-        // Check password
+        // Check if the password is correct
         if (password_verify($password, $user['password'])) {
+            // Password is correct, so log the user in
             $_SESSION['username'] = $user['username'];
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['role'] = 'user'; 
 
+            // Show success message and redirect after 2 seconds
             $success = "Login successful! Redirecting...";
             header("refresh:2; url=../dashboard/user_dashboard.php"); 
             exit();
         } else {
+            // Password is wrong
             $error = "Invalid password!";
         }
     } else {
+        // No user found with this email
         $error = "User not found!";
     }
 
+    // Close the database connection
     mysqli_close($conn);
 }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">

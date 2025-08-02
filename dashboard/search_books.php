@@ -1,4 +1,5 @@
 <?php
+// Start the session to check if user is logged in
 session_start();
 
 // Check if user is logged in
@@ -7,29 +8,29 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'user') {
     exit();
 }
 
+// Include the database connection file
 include("../database/config.php");
 
+// Set default values for our variables
 $search_results = [];
 $search_performed = false;
 $search_term = "";
 
-// Handle search form submission
+// Check if the search form was submitted
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['search'])) {
+    // Get the search term from the form
     $search_term = trim($_POST['search_term']);
     $search_performed = true;
     
+    // Only search if the search term is not empty
     if (!empty($search_term)) {
         // Search by title or author using LIKE for partial matches
         $search_query = "SELECT * FROM books WHERE 
-                        title LIKE ? OR 
-                        author LIKE ? 
+                        title LIKE '%$search_term%' OR 
+                        author LIKE '%$search_term%' 
                         ORDER BY title";
         
-        $stmt = mysqli_prepare($conn, $search_query);
-        $search_pattern = "%" . $search_term . "%";
-        mysqli_stmt_bind_param($stmt, "ss", $search_pattern, $search_pattern);
-        mysqli_stmt_execute($stmt);
-        $search_results = mysqli_stmt_get_result($stmt);
+        $search_results = mysqli_query($conn, $search_query);
     }
 }
 ?>

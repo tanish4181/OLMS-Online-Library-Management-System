@@ -1,7 +1,14 @@
 <?php
+// Start the session to access session data
 session_start();
+
+// Remove all session variables
 session_unset();
+
+// Destroy the session completely
 session_destroy();
-header("Location: index.php"); // Redirect to homepage or login page
+
+// Redirect to the homepage
+header("Location: index.php");
 exit();
 ?>

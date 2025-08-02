@@ -1,4 +1,5 @@
 <?php
+// Start the session to check if admin is logged in
 session_start();
 
 // Check if admin is logged in
@@ -7,67 +8,58 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
     exit();
 }
 
+// Include the database connection file
 include("../database/config.php");
+
+// Include the fine calculator file
 include("../includes/fine_calculator.php");
 
+// Variables to store messages
 $message = "";
 $message_type = "";
 
-// Handle book return
+// Check if the form was submitted
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['return_book'])) {
     $issue_id = $_POST['issue_id'];
     $book_id = $_POST['book_id'];
     
-    // Start transaction for data consistency
-    mysqli_begin_transaction($conn);
+    // Get issue details
+    $get_issue = "SELECT * FROM book_issues WHERE id = '$issue_id'";
+    $result = mysqli_query($conn, $get_issue);
+    $issue = mysqli_fetch_assoc($result);
     
-    try {
-        // Get issue details
-        $get_issue = "SELECT * FROM book_issues WHERE id = ?";
-        $stmt = mysqli_prepare($conn, $get_issue);
-        mysqli_stmt_bind_param($stmt, "i", $issue_id);
-        mysqli_stmt_execute($stmt);
-        $issue = mysqli_stmt_get_result($stmt)->fetch_assoc();
+    if ($issue) {
+        // Calculate final fine
+        $fine_info = getFineInfo($conn, $issue_id);
+        $final_fine = $fine_info ? $fine_info['current_fine'] : 0;
         
-        if ($issue) {
-            // Calculate final fine
-            $fine_info = getFineInfo($conn, $issue_id);
-            $final_fine = $fine_info ? $fine_info['current_fine'] : 0;
+        // Update book issue record
+        $update_issue = "UPDATE book_issues SET 
+                       status = 'returned', 
+                       return_date = NOW(), 
+                       fine_amount = '$final_fine' 
+                       WHERE id = '$issue_id'";
+        
+        if (mysqli_query($conn, $update_issue)) {
+            // Increase book quantity by 1
+            $update_quantity = "UPDATE books SET quantity = quantity + 1 WHERE id = '$book_id'";
             
-            // Update book issue record
-            $update_issue = "UPDATE book_issues SET 
-                           status = 'returned', 
-                           return_date = NOW(), 
-                           fine_amount = ? 
-                           WHERE id = ?";
-            $stmt = mysqli_prepare($conn, $update_issue);
-            mysqli_stmt_bind_param($stmt, "di", $final_fine, $issue_id);
-            
-            if (mysqli_stmt_execute($stmt)) {
-                // Increase book quantity by 1
-                $update_quantity = "UPDATE books SET quantity = quantity + 1 WHERE id = ?";
-                $stmt = mysqli_prepare($conn, $update_quantity);
-                mysqli_stmt_bind_param($stmt, "i", $book_id);
-                
-                if (mysqli_stmt_execute($stmt)) {
-                    mysqli_commit($conn);
-                    $message = "Book returned successfully!";
-                    if ($final_fine > 0) {
-                        $message .= " Fine amount: ₹" . number_format($final_fine, 2);
-                    }
-                    $message_type = "success";
-                } else {
-                    throw new Exception("Error updating book quantity");
+            if (mysqli_query($conn, $update_quantity)) {
+                $message = "Book returned successfully!";
+                if ($final_fine > 0) {
+                    $message .= " Fine amount: ₹" . number_format($final_fine, 2);
                 }
+                $message_type = "success";
             } else {
-                throw new Exception("Error updating issue record");
+                $message = "Error updating book quantity";
+                $message_type = "danger";
             }
         } else {
-            throw new Exception("Issue record not found");
+            $message = "Error updating issue record";
+            $message_type = "danger";
         }
-    } catch (Exception $e) {
-        mysqli_rollback($conn);
-        $message = "Error returning book: " . $e->getMessage();
+    } else {
+        $message = "Issue record not found";
         $message_type = "danger";
     }
 }

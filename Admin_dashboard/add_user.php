@@ -1,4 +1,5 @@
 <?php
+// Start the session to check if admin is logged in
 session_start();
 
 // Check if admin is logged in
@@ -7,8 +8,11 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
     exit();
 }
 
-$success = $error = "";
+// Variables to store success and error messages
+$success = "";
+$error = "";
 
+// Check if the form was submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Connect to database
     $conn = mysqli_connect("localhost", "root", "", "olms");
@@ -17,17 +21,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         die("Connection failed: " . mysqli_connect_error());
     }
 
-    // Get input values
+    // Get the form data
     $username = $_POST['username'];
     $email = $_POST['email'];
     $fullname = $_POST['fullname'];
     $address = $_POST['address'];
     $password = $_POST['password'];
 
-    // Hash the password before storing
+    // Hash the password before storing it in the database
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-    // Insert data
+    // Insert the new user into the database
     $sql = "INSERT INTO users (username, email, fullname, address, password) 
             VALUES ('$username', '$email', '$fullname', '$address', '$hashed_password')";
 
@@ -37,10 +41,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $error = "Error: " . mysqli_error($conn);
     }
 
+    // Close the database connection
     mysqli_close($conn);
 }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">

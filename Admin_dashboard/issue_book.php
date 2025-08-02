@@ -1,4 +1,5 @@
 <?php
+// Start the session to check if admin is logged in
 session_start();
 
 // Check if admin is logged in
@@ -7,56 +8,44 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
     exit();
 }
 
+// Include the database connection file
 include("../database/config.php");
 
+// Variables to store messages
 $message = "";
 $message_type = "";
 
-// Handle book issue form submission
+// Check if the form was submitted
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['issue_book'])) {
+    // Get the form data
     $user_id = $_POST['user_id'];
     $book_id = $_POST['book_id'];
     $due_date = $_POST['due_date'];
     
-    // Validate inputs
+    // Check if all fields are filled
     if ($user_id && $book_id && $due_date) {
-        // Check if book is available
-        $check_availability = "SELECT quantity FROM books WHERE id = ?";
-        $stmt = mysqli_prepare($conn, $check_availability);
-        mysqli_stmt_bind_param($stmt, "i", $book_id);
-        mysqli_stmt_execute($stmt);
-        $result = mysqli_stmt_get_result($stmt);
+        // Check if the book is available (has quantity > 0)
+        $check_availability = "SELECT quantity FROM books WHERE id = '$book_id'";
+        $result = mysqli_query($conn, $check_availability);
         $book = mysqli_fetch_assoc($result);
         
         if ($book['quantity'] > 0) {
-            // Start transaction for data consistency
-            mysqli_begin_transaction($conn);
+            // Insert the book issue record
+            $issue_query = "INSERT INTO book_issues (user_id, book_id, due_date, status) VALUES ('$user_id', '$book_id', '$due_date', 'issued')";
             
-            try {
-                // Insert book issue record
-                $issue_query = "INSERT INTO book_issues (user_id, book_id, due_date, status) VALUES (?, ?, ?, 'issued')";
-                $stmt = mysqli_prepare($conn, $issue_query);
-                mysqli_stmt_bind_param($stmt, "iis", $user_id, $book_id, $due_date);
+            if (mysqli_query($conn, $issue_query)) {
+                // Reduce the book quantity by 1
+                $update_quantity = "UPDATE books SET quantity = quantity - 1 WHERE id = '$book_id'";
                 
-                if (mysqli_stmt_execute($stmt)) {
-                    // Reduce book quantity by 1
-                    $update_quantity = "UPDATE books SET quantity = quantity - 1 WHERE id = ?";
-                    $stmt = mysqli_prepare($conn, $update_quantity);
-                    mysqli_stmt_bind_param($stmt, "i", $book_id);
-                    
-                    if (mysqli_stmt_execute($stmt)) {
-                        mysqli_commit($conn);
-                        $message = "Book issued successfully!";
-                        $message_type = "success";
-                    } else {
-                        throw new Exception("Error updating book quantity");
-                    }
+                if (mysqli_query($conn, $update_quantity)) {
+                    $message = "Book issued successfully!";
+                    $message_type = "success";
                 } else {
-                    throw new Exception("Error issuing book");
+                    $message = "Error updating book quantity";
+                    $message_type = "danger";
                 }
-            } catch (Exception $e) {
-                mysqli_rollback($conn);
-                $message = "Error issuing book: " . $e->getMessage();
+            } else {
+                $message = "Error issuing book";
                 $message_type = "danger";
             }
         } else {
@@ -69,11 +58,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['issue_book'])) {
     }
 }
 
-// Get all users for dropdown
+// Get all users for the dropdown
 $users_query = "SELECT id, fullname, username FROM users WHERE role = 'user' ORDER BY fullname";
 $users_result = mysqli_query($conn, $users_query);
 
-// Get all available books for dropdown
+// Get all available books for the dropdown
 $books_query = "SELECT id, title, author, quantity FROM books WHERE quantity > 0 ORDER BY title";
 $books_result = mysqli_query($conn, $books_query);
 
@@ -172,6 +161,7 @@ $default_due_date = date('Y-m-d', strtotime('+14 days'));
                     </div>
                     <div class="card-body">
                         <?php
+                        // Get recent book issues
                         $recent_issues_query = "SELECT bi.*, u.fullname, u.username, b.title, b.author 
                                               FROM book_issues bi 
                                               JOIN users u ON bi.user_id = u.id 

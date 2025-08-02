@@ -1,38 +1,48 @@
 <?php
+// Start the session to store admin data
 session_start();
-require_once("../database/config.php");
 
+// Include the database connection file
+require("../database/config.php");
+
+// Variable to store error message
 $message = "";
 
+// Check if the form was submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $email = $_POST["email"] ?? '';
-    $passwordInput = $_POST["password"] ?? '';
+    // Get the email and password from the form
+    $email = $_POST["email"];
+    $passwordInput = $_POST["password"];
 
-    $stmt = $conn->prepare("SELECT * FROM admin WHERE email = ?");
-    $stmt->bind_param("s", $email);
-    $stmt->execute();
-    $result = $stmt->get_result();
+    // Create SQL query to find admin with this email
+    $sql = "SELECT * FROM admin WHERE email = '$email'";
+    $result = mysqli_query($conn, $sql);
 
-    if ($result->num_rows === 1) {
-        $admin = $result->fetch_assoc();
+    // Check if we found an admin with this email
+    if ($result && mysqli_num_rows($result) == 1) {
+        // Get the admin data
+        $admin = mysqli_fetch_assoc($result);
 
+        // Check if the password is correct
         if (password_verify($passwordInput, $admin["password"])) {
+            // Password is correct, so log the admin in
             $_SESSION["admin_logged_in"] = true;
             $_SESSION["sta"] = $email;
             header("Location: /olms/Admin_dashboard/admindashboard.php");
             exit();
         } else {
+            // Password is wrong
             $message = "Incorrect password check again";
         }
     } else {
+        // No admin found with this email
         $message = "Admin not found.";
     }
 
-    $stmt->close();
-    $conn->close();
+    // Close the database connection
+    mysqli_close($conn);
 }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">

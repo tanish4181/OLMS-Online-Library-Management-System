@@ -1,4 +1,5 @@
 <?php
+// Start the session to check if admin is logged in
 session_start();
 
 // Check if admin is logged in
@@ -7,88 +8,77 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
     exit();
 }
 
-// Initialize variables with default values
+// Include the database connection file
+include('../database/config.php');
+
+// Set default values for our variables
 $total_users = 0;
 $total_admins = 0;
 $total_all_users = 0;
 $total_books = 0;
 $borrowed_books = 0;
-$db_connected = false;
-$error_message = "";
+$total_quantity = 0;
 
-// Try to connect to database
-try {
-    include('../database/config.php');
-    $db_connected = true;
-    
-    // Count total members (only users, not admins)
-    $sql = "SELECT COUNT(*) as total_users FROM users WHERE role = 'user'";
-    $result = mysqli_query($conn, $sql);
-    if ($result) {
-        $data = mysqli_fetch_assoc($result);
-        $total_users = $data['total_users'];
+// Count total members (only users, not admins)
+$sql = "SELECT COUNT(*) as total_users FROM users WHERE role = 'user'";
+$result = mysqli_query($conn, $sql);
+if ($result) {
+    $data = mysqli_fetch_assoc($result);
+    $total_users = $data['total_users'];
+}
+
+// Count total admins
+$sql_admin = "SELECT COUNT(*) as total_admins FROM users WHERE role = 'admin'";
+$result_admin = mysqli_query($conn, $sql_admin);
+if ($result_admin) {
+    $data_admin = mysqli_fetch_assoc($result_admin);
+    $total_admins = $data_admin['total_admins'];
+}
+
+// Count total users (both users and admins)
+$sql_total = "SELECT COUNT(*) as total_all_users FROM users";
+$result_total = mysqli_query($conn, $sql_total);
+if ($result_total) {
+    $data_total = mysqli_fetch_assoc($result_total);
+    $total_all_users = $data_total['total_all_users'];
+}
+
+// Count total books from books table
+$sql_books = "SELECT COUNT(*) as total_books FROM books";
+$result_books = mysqli_query($conn, $sql_books);
+if ($result_books) {
+    $data_books = mysqli_fetch_assoc($result_books);
+    $total_books = $data_books['total_books'];
+}
+
+// Count total quantity of books (sum of all book quantities)
+$sql_total_quantity = "SELECT SUM(quantity) as total_quantity FROM books";
+$result_quantity = mysqli_query($conn, $sql_total_quantity);
+if ($result_quantity) {
+    $data_quantity = mysqli_fetch_assoc($result_quantity);
+    $total_quantity = $data_quantity['total_quantity'] ? $data_quantity['total_quantity'] : 0;
+}
+
+// Check if borrowings table exists and count borrowed books
+$check_borrowing_table = "SHOW TABLES LIKE 'borrowings'";
+$borrowing_table_exists = mysqli_query($conn, $check_borrowing_table);
+if ($borrowing_table_exists && mysqli_num_rows($borrowing_table_exists) > 0) {
+    $sql_borrowed = "SELECT COUNT(*) as borrowed_books FROM borrowings WHERE status = 'borrowed'";
+    $result_borrowed = mysqli_query($conn, $sql_borrowed);
+    if ($result_borrowed) {
+        $data_borrowed = mysqli_fetch_assoc($result_borrowed);
+        $borrowed_books = $data_borrowed['borrowed_books'];
     }
+}
 
-    // Count total admins
-    $sql_admin = "SELECT COUNT(*) as total_admins FROM users WHERE role = 'admin'";
-    $result_admin = mysqli_query($conn, $sql_admin);
-    if ($result_admin) {
-        $data_admin = mysqli_fetch_assoc($result_admin);
-        $total_admins = $data_admin['total_admins'];
+// Get recent books for display
+$sql_recent_books = "SELECT * FROM books ORDER BY id DESC LIMIT 4";
+$result_recent = mysqli_query($conn, $sql_recent_books);
+$recent_books = [];
+if ($result_recent) {
+    while ($row = mysqli_fetch_assoc($result_recent)) {
+        $recent_books[] = $row;
     }
-
-    // Count total users (both users and admins)
-    $sql_total = "SELECT COUNT(*) as total_all_users FROM users";
-    $result_total = mysqli_query($conn, $sql_total);
-    if ($result_total) {
-        $data_total = mysqli_fetch_assoc($result_total);
-        $total_all_users = $data_total['total_all_users'];
-    }
-
-    // Count total books from books table
-    $sql_books = "SELECT COUNT(*) as total_books FROM books";
-    $result_books = mysqli_query($conn, $sql_books);
-    if ($result_books) {
-        $data_books = mysqli_fetch_assoc($result_books);
-        $total_books = $data_books['total_books'];
-    }
-
-    // Count total quantity of books (sum of all book quantities)
-    $sql_total_quantity = "SELECT SUM(quantity) as total_quantity FROM books";
-    $result_quantity = mysqli_query($conn, $sql_total_quantity);
-    if ($result_quantity) {
-        $data_quantity = mysqli_fetch_assoc($result_quantity);
-        $total_quantity = $data_quantity['total_quantity'] ? $data_quantity['total_quantity'] : 0;
-    }
-
-    // Count borrowed books (for now, we'll set this to 0 since borrowings table doesn't exist yet)
-    $borrowed_books = 0;
-    
-    // Check if borrowings table exists and count borrowed books
-    $check_borrowing_table = "SHOW TABLES LIKE 'borrowings'";
-    $borrowing_table_exists = mysqli_query($conn, $check_borrowing_table);
-    if ($borrowing_table_exists && mysqli_num_rows($borrowing_table_exists) > 0) {
-        $sql_borrowed = "SELECT COUNT(*) as borrowed_books FROM borrowings WHERE status = 'borrowed'";
-        $result_borrowed = mysqli_query($conn, $sql_borrowed);
-        if ($result_borrowed) {
-            $data_borrowed = mysqli_fetch_assoc($result_borrowed);
-            $borrowed_books = $data_borrowed['borrowed_books'];
-        }
-    }
-
-    // Get recent books for display
-    $sql_recent_books = "SELECT * FROM books ORDER BY id DESC LIMIT 4";
-    $result_recent = mysqli_query($conn, $sql_recent_books);
-    $recent_books = [];
-    if ($result_recent) {
-        while ($row = mysqli_fetch_assoc($result_recent)) {
-            $recent_books[] = $row;
-        }
-    }
-
-} catch (Exception $e) {
-    $db_connected = false;
-    $error_message = "Database connection failed. Please ensure MySQL server is running.";
 }
 ?>
 
@@ -116,23 +106,7 @@ try {
     <small class="user-hsmall-text">Discover thousands of books and resources at your fingertips</small>
   </div>
 
-  <!-- Database Connection Status -->
-  <?php if (!$db_connected): ?>
-  <div class="container" style="margin-bottom: 20px;">
-    <div class="row">
-      <div class="col-md-12">
-        <div class="alert alert-danger" style="text-align: center;">
-          <strong>⚠️ Database Connection Error:</strong><br>
-          <?php echo isset($error_message) ? $error_message : 'Unable to connect to database.'; ?><br>
-          <small>Please start your MySQL server in XAMPP Control Panel.</small>
-        </div>
-      </div>
-    </div>
-  </div>
-  <?php endif; ?>
-
   <!-- User Statistics Summary -->
-  <?php if ($db_connected): ?>
   <div class="container" style="margin-bottom: 20px;">
     <div class="row">
       <div class="col-md-12">
@@ -143,7 +117,7 @@ try {
           Administrators: <span class="badge bg-warning"><?php echo $total_admins; ?></span>
           <?php if ($total_books > 0): ?>
           | Total Books: <span class="badge bg-info"><?php echo $total_books; ?></span>
-          | Total Copies: <span class="badge bg-info"><?php echo isset($total_quantity) ? $total_quantity : 0; ?></span>
+          | Total Copies: <span class="badge bg-info"><?php echo $total_quantity; ?></span>
           <?php endif; ?>
           <?php if ($borrowed_books > 0): ?>
           | Borrowed Books: <span class="badge bg-secondary"><?php echo $borrowed_books; ?></span>
@@ -152,49 +126,48 @@ try {
       </div>
     </div>
   </div>
-  <?php endif; ?>
 
   <!-- user details boxes -->
   <div class="user-details-box">
     <div class="user-dMainBox">
       <div class="user-total-books">
         <div class="user-numbers">
-          <h1 style="color: #dc3545;"><?php echo $db_connected ? $total_books : 'N/A'; ?></h1>
+          <h1 style="color: #dc3545;"><?php echo $total_books; ?></h1>
         </div>
         <small class="user-small-txt">Total Books</small>
       </div>
       
       <div class="user-regm">
         <div class="user-numbers">
-          <h1 style="color: red;"><?php echo $db_connected ? $total_users : 'N/A'; ?></h1>
+          <h1 style="color: red;"><?php echo $total_users; ?></h1>
         </div>
         <small class="user-small-txt">Registered Members</small>
       </div>
       
       <div class="user-borrowig">
         <div class="user-numbers">
-          <h1 style="color: #dc3545;"><?php echo $db_connected ? (isset($total_quantity) ? $total_quantity : 0) : 'N/A'; ?></h1>
+          <h1 style="color: #dc3545;"><?php echo $total_quantity; ?></h1>
         </div>
         <small class="user-small-txt">Total Copies</small>
       </div>
       
       <div class="user-books-categories">
         <div class="user-numbers">
-          <h1 style="color: #28a745;"><?php echo $db_connected ? $borrowed_books : 'N/A'; ?></h1>
+          <h1 style="color: #28a745;"><?php echo $borrowed_books; ?></h1>
         </div>
         <small class="user-small-txt">Borrowed Books</small>
       </div>
       
       <div class="user-books-categories">
         <div class="user-numbers">
-          <h1 style="color: #ffc107;"><?php echo $db_connected ? $total_admins : 'N/A'; ?></h1>
+          <h1 style="color: #ffc107;"><?php echo $total_admins; ?></h1>
         </div>
         <small class="user-small-txt">Administrators</small>
       </div>
       
       <div class="user-books-categories">
         <div class="user-numbers">
-          <h1 style="color: #17a2b8;"><?php echo $db_connected ? $total_all_users : 'N/A'; ?></h1>
+          <h1 style="color: #17a2b8;"><?php echo $total_all_users; ?></h1>
         </div>
         <small class="user-small-txt">Total Users</small>
       </div>
@@ -202,13 +175,13 @@ try {
   </div>
 
   <!-- Book Information -->
-  <?php if ($db_connected && $total_books > 0): ?>
+  <?php if ($total_books > 0): ?>
   <div class="container" style="margin-bottom: 20px;">
     <div class="row">
       <div class="col-md-12">
         <div class="alert alert-success" style="text-align: center;">
           <strong>📚 Books Database Active:</strong><br>
-          <small>Total Books: <?php echo $total_books; ?> | Total Copies: <?php echo isset($total_quantity) ? $total_quantity : 0; ?> | Borrowed: <?php echo $borrowed_books; ?></small>
+          <small>Total Books: <?php echo $total_books; ?> | Total Copies: <?php echo $total_quantity; ?> | Borrowed: <?php echo $borrowed_books; ?></small>
         </div>
       </div>
     </div>
@@ -216,7 +189,7 @@ try {
   <?php endif; ?>
 
   <!-- Recent Books Section -->
-  <?php if ($db_connected && !empty($recent_books)): ?>
+  <?php if (!empty($recent_books)): ?>
   <div class="container" style="margin-bottom: 20px;">
     <h2>Recent Books in Database</h2>
     <div class="row">
@@ -266,7 +239,7 @@ try {
             </tr>
           </thead>
           <tbody>
-            <?php if ($db_connected && $borrowed_books > 0): ?>
+            <?php if ($borrowed_books > 0): ?>
             <tr class="user-tbody-row">
               <td>Sample User</td>
               <td>Sample Book</td>

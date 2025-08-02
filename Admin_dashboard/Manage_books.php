@@ -1,4 +1,5 @@
 <?php
+// Start the session to check if admin is logged in
 session_start();
 
 // Check if admin is logged in
@@ -7,13 +8,16 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
     exit();
 }
 
+// Include the database connection file
 include("../database/config.php");
 
+// Variables to store messages
 $message = "";
 $message_type = "";
 
-// Handle book operations
+// Check if the form was submitted
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // Handle adding a new book
     if (isset($_POST['add_book'])) {
         $title = trim($_POST['title']);
         $author = trim($_POST['author']);
@@ -22,12 +26,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $description = trim($_POST['description']);
         $cover = $_POST['cover'] ?: 'https://via.placeholder.com/190x260?text=Book+Cover';
         
+        // Check if all required fields are filled
         if ($title && $author && $category && $quantity > 0) {
-            $insert_query = "INSERT INTO books (title, author, category, quantity, description, cover) VALUES (?, ?, ?, ?, ?, ?)";
-            $stmt = mysqli_prepare($conn, $insert_query);
-            mysqli_stmt_bind_param($stmt, "sssis", $title, $author, $category, $quantity, $description, $cover);
+            $insert_query = "INSERT INTO books (title, author, category, quantity, description, cover) VALUES ('$title', '$author', '$category', '$quantity', '$description', '$cover')";
             
-            if (mysqli_stmt_execute($stmt)) {
+            if (mysqli_query($conn, $insert_query)) {
                 $message = "Book added successfully!";
                 $message_type = "success";
             } else {
@@ -38,7 +41,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $message = "Please fill all required fields.";
             $message_type = "warning";
         }
-    } elseif (isset($_POST['edit_book'])) {
+    } 
+    // Handle editing a book
+    elseif (isset($_POST['edit_book'])) {
         $book_id = $_POST['book_id'];
         $title = trim($_POST['title']);
         $author = trim($_POST['author']);
@@ -47,12 +52,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $description = trim($_POST['description']);
         $cover = $_POST['cover'] ?: 'https://via.placeholder.com/190x260?text=Book+Cover';
         
+        // Check if all required fields are filled
         if ($title && $author && $category && $quantity >= 0) {
-            $update_query = "UPDATE books SET title = ?, author = ?, category = ?, quantity = ?, description = ?, cover = ? WHERE id = ?";
-            $stmt = mysqli_prepare($conn, $update_query);
-            mysqli_stmt_bind_param($stmt, "sssis", $title, $author, $category, $quantity, $description, $cover, $book_id);
+            $update_query = "UPDATE books SET title = '$title', author = '$author', category = '$category', quantity = '$quantity', description = '$description', cover = '$cover' WHERE id = '$book_id'";
             
-            if (mysqli_stmt_execute($stmt)) {
+            if (mysqli_query($conn, $update_query)) {
                 $message = "Book updated successfully!";
                 $message_type = "success";
             } else {
@@ -63,26 +67,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $message = "Please fill all required fields.";
             $message_type = "warning";
         }
-    } elseif (isset($_POST['delete_book'])) {
+    } 
+    // Handle deleting a book
+    elseif (isset($_POST['delete_book'])) {
         $book_id = $_POST['book_id'];
         
         // Check if book is currently issued
-        $check_issued = "SELECT COUNT(*) as issued_count FROM book_issues WHERE book_id = ? AND status IN ('issued', 'overdue')";
-        $stmt = mysqli_prepare($conn, $check_issued);
-        mysqli_stmt_bind_param($stmt, "i", $book_id);
-        mysqli_stmt_execute($stmt);
-        $result = mysqli_stmt_get_result($stmt);
+        $check_issued = "SELECT COUNT(*) as issued_count FROM book_issues WHERE book_id = '$book_id' AND status IN ('issued', 'overdue')";
+        $result = mysqli_query($conn, $check_issued);
         $issued_count = mysqli_fetch_assoc($result)['issued_count'];
         
         if ($issued_count > 0) {
             $message = "Cannot delete book. It has " . $issued_count . " active issue(s).";
             $message_type = "warning";
         } else {
-            $delete_query = "DELETE FROM books WHERE id = ?";
-            $stmt = mysqli_prepare($conn, $delete_query);
-            mysqli_stmt_bind_param($stmt, "i", $book_id);
+            $delete_query = "DELETE FROM books WHERE id = '$book_id'";
             
-            if (mysqli_stmt_execute($stmt)) {
+            if (mysqli_query($conn, $delete_query)) {
                 $message = "Book deleted successfully!";
                 $message_type = "success";
             } else {
@@ -93,11 +94,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
-// Get all books
+// Get all books from the database
 $books_query = "SELECT * FROM books ORDER BY title";
 $books_result = mysqli_query($conn, $books_query);
 
-// Get unique categories for dropdown
+// Get unique categories for the dropdown
 $categories_query = "SELECT DISTINCT category FROM books ORDER BY category";
 $categories_result = mysqli_query($conn, $categories_query);
 $categories = [];

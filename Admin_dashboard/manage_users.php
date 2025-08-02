@@ -1,4 +1,5 @@
 <?php
+// Start the session to check if admin is logged in
 session_start();
 
 // Check if admin is logged in
@@ -7,13 +8,16 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
     exit();
 }
 
+// Include the database connection file
 include("../database/config.php");
 
+// Variables to store messages
 $message = "";
 $message_type = "";
 
-// Handle user operations
+// Check if the form was submitted
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // Handle adding a new user
     if (isset($_POST['add_user'])) {
         $fullname = trim($_POST['fullname']);
         $email = trim($_POST['email']);
@@ -22,26 +26,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $address = trim($_POST['address']);
         $role = $_POST['role'];
         
+        // Check if all required fields are filled
         if ($fullname && $email && $username && $password) {
             // Check if username or email already exists
-            $check_query = "SELECT id FROM users WHERE username = ? OR email = ?";
-            $stmt = mysqli_prepare($conn, $check_query);
-            mysqli_stmt_bind_param($stmt, "ss", $username, $email);
-            mysqli_stmt_execute($stmt);
-            $result = mysqli_stmt_get_result($stmt);
+            $check_query = "SELECT id FROM users WHERE username = '$username' OR email = '$email'";
+            $result = mysqli_query($conn, $check_query);
             
             if (mysqli_num_rows($result) > 0) {
                 $message = "Username or email already exists. Please choose different credentials.";
                 $message_type = "warning";
             } else {
-                // Hash the password
+                // Hash the password before storing
                 $hashed_password = password_hash($password, PASSWORD_DEFAULT);
                 
-                $insert_query = "INSERT INTO users (fullname, email, username, password, address, role) VALUES (?, ?, ?, ?, ?, ?)";
-                $stmt = mysqli_prepare($conn, $insert_query);
-                mysqli_stmt_bind_param($stmt, "ssssss", $fullname, $email, $username, $hashed_password, $address, $role);
+                $insert_query = "INSERT INTO users (fullname, email, username, password, address, role) VALUES ('$fullname', '$email', '$username', '$hashed_password', '$address', '$role')";
                 
-                if (mysqli_stmt_execute($stmt)) {
+                if (mysqli_query($conn, $insert_query)) {
                     $message = "User added successfully!";
                     $message_type = "success";
                 } else {
@@ -53,7 +53,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $message = "Please fill all required fields.";
             $message_type = "warning";
         }
-    } elseif (isset($_POST['edit_user'])) {
+    } 
+    // Handle editing a user
+    elseif (isset($_POST['edit_user'])) {
         $user_id = $_POST['user_id'];
         $fullname = trim($_POST['fullname']);
         $email = trim($_POST['email']);
@@ -61,12 +63,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $address = trim($_POST['address']);
         $role = $_POST['role'];
         
+        // Check if all required fields are filled
         if ($fullname && $email && $username) {
-            $update_query = "UPDATE users SET fullname = ?, email = ?, username = ?, address = ?, role = ? WHERE id = ?";
-            $stmt = mysqli_prepare($conn, $update_query);
-            mysqli_stmt_bind_param($stmt, "sssssi", $fullname, $email, $username, $address, $role, $user_id);
+            $update_query = "UPDATE users SET fullname = '$fullname', email = '$email', username = '$username', address = '$address', role = '$role' WHERE id = '$user_id'";
             
-            if (mysqli_stmt_execute($stmt)) {
+            if (mysqli_query($conn, $update_query)) {
                 $message = "User updated successfully!";
                 $message_type = "success";
             } else {
@@ -77,26 +78,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $message = "Please fill all required fields.";
             $message_type = "warning";
         }
-    } elseif (isset($_POST['delete_user'])) {
+    } 
+    // Handle deleting a user
+    elseif (isset($_POST['delete_user'])) {
         $user_id = $_POST['user_id'];
         
         // Check if user has active book issues
-        $check_issues = "SELECT COUNT(*) as issue_count FROM book_issues WHERE user_id = ? AND status IN ('issued', 'overdue')";
-        $stmt = mysqli_prepare($conn, $check_issues);
-        mysqli_stmt_bind_param($stmt, "i", $user_id);
-        mysqli_stmt_execute($stmt);
-        $result = mysqli_stmt_get_result($stmt);
+        $check_issues = "SELECT COUNT(*) as issue_count FROM book_issues WHERE user_id = '$user_id' AND status IN ('issued', 'overdue')";
+        $result = mysqli_query($conn, $check_issues);
         $issue_count = mysqli_fetch_assoc($result)['issue_count'];
         
         if ($issue_count > 0) {
             $message = "Cannot delete user. They have " . $issue_count . " active book issue(s).";
             $message_type = "warning";
         } else {
-            $delete_query = "DELETE FROM users WHERE id = ?";
-            $stmt = mysqli_prepare($conn, $delete_query);
-            mysqli_stmt_bind_param($stmt, "i", $user_id);
+            $delete_query = "DELETE FROM users WHERE id = '$user_id'";
             
-            if (mysqli_stmt_execute($stmt)) {
+            if (mysqli_query($conn, $delete_query)) {
                 $message = "User deleted successfully!";
                 $message_type = "success";
             } else {
@@ -107,7 +105,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
-// Get all users
+// Get all users from the database
 $users_query = "SELECT * FROM users ORDER BY fullname";
 $users_result = mysqli_query($conn, $users_query);
 ?>
