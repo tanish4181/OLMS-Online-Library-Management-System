@@ -26,7 +26,7 @@ try {
 
     // Check if user is logged in
     session_start();
-    if (isset($_SESSION['user_id'])) {
+    if (isset($_SESSION['user_id']) && $_SESSION['role'] == 'user') {
         $user_id = $_SESSION['user_id'];
         
         // Check if borrowings table exists

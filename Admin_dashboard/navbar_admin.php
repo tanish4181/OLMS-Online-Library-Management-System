@@ -32,10 +32,13 @@
                         <a class="nav-link text-white" href="/OLMS/Admin_dashboard/admindashboard.php">Dashboard</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="Manage_books.php">Manage books</a>
+                        <a class="nav-link text-white" href="manage_books.php">Manage Books</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="/olms/Admin_dashboard/Manage_user.php">Manage users</a>
+                        <a class="nav-link text-white" href="manage_users.php">Manage Users</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="manage_requests.php">Manage Requests</a>
                     </li>
                 </ul>
                 <div class="logout-button">

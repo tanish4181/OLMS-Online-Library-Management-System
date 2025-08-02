@@ -22,7 +22,7 @@
               >
             </li>
             <li class="nav-item">
-              <a class="nav-link text-white" href="./browse_book.php">Browse Books</a>
+              <a class="nav-link text-white" href="./request_book.php">Request Books</a>
             </li>
             <li class="nav-item">
               <a class="nav-link text-white" href="./my_books.php">My Books</a>

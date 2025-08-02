@@ -1,6 +1,12 @@
 <?php
 session_start();
 
+// Check if admin is logged in
+if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
+    header("Location: ../auth/adminLogin.php");
+    exit();
+}
+
 // Initialize variables with default values
 $total_users = 0;
 $total_admins = 0;

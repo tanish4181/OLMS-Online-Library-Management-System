@@ -1,4 +1,12 @@
 <?php
+session_start();
+
+// Check if admin is logged in
+if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
+    header("Location: ../auth/adminLogin.php");
+    exit();
+}
+
 $success = $error = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
