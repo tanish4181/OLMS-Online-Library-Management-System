@@ -43,9 +43,6 @@
                     <li class="nav-item">
                         <a class="nav-link text-white" href="return_book.php">Return Books</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="manage_requests.php">Manage Requests</a>
-                    </li>
                 </ul>
                 <div class="logout-button">
                     <a href="../logout.php"><button class="btn btn-secondary"> Logout </button></a>

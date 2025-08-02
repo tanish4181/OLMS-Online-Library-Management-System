@@ -28,13 +28,13 @@ if (isset($_SESSION['user_id']) && $_SESSION['role'] == 'user') {
         $categories = mysqli_fetch_assoc($categoriesResult)['total_categories'];
     }
 
-    // Check if the borrowings table exists
-    $check_borrowing_table = "SHOW TABLES LIKE 'borrowings'";
+    // Check if the book_issues table exists
+    $check_borrowing_table = "SHOW TABLES LIKE 'book_issues'";
     $borrowing_table_exists = mysqli_query($conn, $check_borrowing_table);
     
-    // If borrowings table exists, count how many books this user has borrowed
+    // If book_issues table exists, count how many books this user has borrowed
     if ($borrowing_table_exists && mysqli_num_rows($borrowing_table_exists) > 0) {
-        $activeBorrowQuery = "SELECT COUNT(*) as active FROM borrowings WHERE user_id = '$user_id' AND status = 'borrowed'";
+        $activeBorrowQuery = "SELECT COUNT(*) as active FROM book_issues WHERE user_id = '$user_id' AND status = 'issued'";
         $activeBorrowResult = mysqli_query($conn, $activeBorrowQuery);
         if ($activeBorrowResult) {
             $activeBorrow = mysqli_fetch_assoc($activeBorrowResult)['active'];
