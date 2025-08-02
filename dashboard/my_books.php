@@ -11,37 +11,8 @@ include("../database/config.php");
 include("../includes/fine_calculator.php");
 
 $user_id = $_SESSION['user_id'];
-$message = "";
-$message_type = "";
 
-// Handle book return
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['return_book'])) {
-    $issue_id = $_POST['issue_id'];
-    $book_id = $_POST['book_id'];
-    
-    if (returnBook($conn, $issue_id, $book_id)) {
-        $message = "Book returned successfully!";
-        $message_type = "success";
-    } else {
-        $message = "Error returning book. Please try again.";
-        $message_type = "danger";
-    }
-}
-
-// Handle fine payment
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['pay_fine'])) {
-    $issue_id = $_POST['issue_id'];
-    
-    if (markFineAsPaid($conn, $issue_id)) {
-        $message = "Fine paid successfully!";
-        $message_type = "success";
-    } else {
-        $message = "Error processing payment. Please try again.";
-        $message_type = "danger";
-    }
-}
-
-// Update all fines first
+// Update all fines first (for display purposes only)
 updateAllFines($conn);
 
 // Get user's current book issues
@@ -86,18 +57,11 @@ $book_history = mysqli_stmt_get_result($stmt);
             <div class="col-md-12">
                 <h2 class="mb-4">My Books</h2>
                 
-                <!-- Display message if any -->
-                <?php if ($message): ?>
-                <div class="alert alert-<?php echo $message_type; ?> alert-dismissible fade show" role="alert">
-                    <?php echo $message; ?>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-                <?php endif; ?>
-                
                 <!-- Current Issues Section -->
                 <div class="card mb-4">
                     <div class="card-header">
                         <h4>Currently Issued Books</h4>
+                        <small class="text-muted">These are the books you currently have borrowed</small>
                     </div>
                     <div class="card-body">
                         <?php if (mysqli_num_rows($current_issues) > 0): ?>
@@ -135,23 +99,8 @@ $book_history = mysqli_stmt_get_result($stmt);
                                                 </div>
                                                 <?php endif; ?>
                                                 
-                                                <div class="d-flex gap-2">
-                                                    <form method="POST" style="display: inline;">
-                                                        <input type="hidden" name="issue_id" value="<?php echo $issue['id']; ?>">
-                                                        <input type="hidden" name="book_id" value="<?php echo $issue['book_id']; ?>">
-                                                        <button type="submit" name="return_book" class="btn btn-primary btn-sm">
-                                                            Return Book
-                                                        </button>
-                                                    </form>
-                                                    
-                                                    <?php if ($fine_info && $fine_info['is_overdue'] && !$issue['fine_paid']): ?>
-                                                    <form method="POST" style="display: inline;">
-                                                        <input type="hidden" name="issue_id" value="<?php echo $issue['id']; ?>">
-                                                        <button type="submit" name="pay_fine" class="btn btn-warning btn-sm">
-                                                            Pay Fine
-                                                        </button>
-                                                    </form>
-                                                    <?php endif; ?>
+                                                <div class="alert alert-info py-2">
+                                                    <small><i class="bi bi-info-circle"></i> Contact the library staff to return this book or pay any fines.</small>
                                                 </div>
                                             </div>
                                         </div>
@@ -162,6 +111,7 @@ $book_history = mysqli_stmt_get_result($stmt);
                         </div>
                         <?php else: ?>
                         <div class="alert alert-info">
+                            <i class="bi bi-info-circle"></i>
                             You don't have any books currently issued.
                         </div>
                         <?php endif; ?>
@@ -172,6 +122,7 @@ $book_history = mysqli_stmt_get_result($stmt);
                 <div class="card">
                     <div class="card-header">
                         <h4>Book History</h4>
+                        <small class="text-muted">Books you have borrowed in the past</small>
                     </div>
                     <div class="card-body">
                         <?php if (mysqli_num_rows($book_history) > 0): ?>
@@ -183,7 +134,7 @@ $book_history = mysqli_stmt_get_result($stmt);
                                         <th>Author</th>
                                         <th>Issue Date</th>
                                         <th>Return Date</th>
-                                        <th>Fine Paid</th>
+                                        <th>Fine Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -210,6 +161,7 @@ $book_history = mysqli_stmt_get_result($stmt);
                         </div>
                         <?php else: ?>
                         <div class="alert alert-info">
+                            <i class="bi bi-info-circle"></i>
                             No book history found.
                         </div>
                         <?php endif; ?>

@@ -112,40 +112,15 @@ try {
     </div>
 
     <!-- search book box -->
-
     <div class="user-search-box">
       <div class="user-internal-box">
         <div class="search box">
-          <h4>search book</h4>
-          <form action="">
-            <label class="" for=""
-              ><strong> <small>Search books</small> </strong></label
-            >
-            <br />
-            <input
-              class="user-form"
-              placeholder="Enter book title"
-              type="text"
-            />
-          </form>
-        </div>
-        <div class="category">
-          <form action="">
-            <label class="user-cat-lab" for=""
-              ><strong> <small>Category</small> </strong></label
-            >
-            <br />
-            <select class="user-form">
-              <option value="all-categories">All categories</option>
-              <option value="fiction">Fiction</option>
-              <option value="non-fiction">Non-fiction</option>
-              <option value="science">Science</option>
-            </select>
-          </form>
+          <h4>Library Actions</h4>
+          <p class="text-muted">What would you like to do today?</p>
         </div>
         <div class="user-srcbx-btn">
-          <button>Search</button>
-          <button>Browse all</button>
+          <a href="browse_books.php" class="btn btn-primary">Browse All Books</a>
+          <a href="search_books.php" class="btn btn-secondary">Search Books</a>
         </div>
       </div>
     </div>

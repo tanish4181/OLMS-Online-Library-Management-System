@@ -38,6 +38,12 @@
                         <a class="nav-link text-white" href="manage_users.php">Manage Users</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link text-white" href="issue_book.php">Issue Books</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="return_book.php">Return Books</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link text-white" href="manage_requests.php">Manage Requests</a>
                     </li>
                 </ul>
