@@ -17,7 +17,7 @@
   include("navbar_admin.php");
   ?>
   <!-- welcome heading -->
-  <div class="user-dheading container">
+  <div class="user-dheading">
     <h1 style="color: #dc3545;" class="user-dtext">Welcome Library Adminstrator</h1>
     <small class="user-hsmall-text">Discover thousands of books and resources at your fingertips</small>
   </div>
