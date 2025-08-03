@@ -121,6 +121,7 @@ while ($row = mysqli_fetch_assoc($categories_result)) {
     <!-- Include admin navbar -->
     <?php include("navbar_admin.php"); ?>
     
+    <div class="main-content">
     <div class="container mt-4">
         <div class="row">
             <div class="col-md-12">
@@ -349,6 +350,7 @@ while ($row = mysqli_fetch_assoc($categories_result)) {
                 </form>
             </div>
         </div>
+    </div>
     </div>
   <?php
   include("footer.php");

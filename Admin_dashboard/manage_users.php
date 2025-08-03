@@ -124,6 +124,7 @@ $users_result = mysqli_query($conn, $users_query);
     <!-- Include admin navbar -->
     <?php include("navbar_admin.php"); ?>
     
+    <div class="main-content">
     <div class="container mt-4">
         <div class="row">
             <div class="col-md-12">
@@ -315,6 +316,7 @@ $users_result = mysqli_query($conn, $users_query);
                 </form>
             </div>
         </div>
+    </div>
     </div>
   <?php
   include("footer.php");

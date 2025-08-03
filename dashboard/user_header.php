@@ -1,19 +1,21 @@
-   
-   <nav
-      class="navbar navbar-expand-lg bg-primary">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
       <div class="container-fluid">
-        <a class="navbar-brand fw-bold text-white" href="./user_dashboard.php">OLMS</a>
+        <a class="navbar-brand fw-bold" href="#">OLMS</a>
 
         <button
-          class="navbar-toggler text-white"
+          class="navbar-toggler"
           type="button"
           data-bs-toggle="collapse"
-          data-bs-target="#navbarNav">
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
 
-        <div class="collapse navbar-collapse user-dnav d-flex justify-content-between align-items-center" id="navbarNav">
-          <ul class="navbar-nav">
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <!-- Centered navigation tabs -->
+          <ul class="navbar-nav mx-auto">
             <li class="nav-item">
               <a class="nav-link text-white" href="./user_dashboard.php">Home</a>
             </li>
@@ -27,9 +29,10 @@
               <a class="nav-link text-white" href="./my_books.php">My Books</a>
             </li>
           </ul>
-          <div class="logout-button">
-            <a href="../logout.php"><button class="btn btn-secondary"> Logout </button></a>
-
+          
+          <!-- Logout button on the right -->
+          <div class="d-flex">
+            <a href="../logout.php" class="btn btn-outline-light">Logout</a>
           </div>
         </div>
       </div>

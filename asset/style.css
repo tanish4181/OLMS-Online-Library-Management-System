@@ -147,8 +147,34 @@ body {
 
 }
 
+
+
+/* Ensure the body and html have proper height for sticky footer */
+html, body {
+  height: 100%;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Main content wrapper to push footer down */
+.main-content {
+  flex: 1 0 auto;
+  min-height: calc(100vh - 200px); /* Ensure minimum height for content */
+}
+
+/* Additional footer styling for better appearance */
 #footer {
   margin-top: auto;
+  position: sticky;
+  bottom: 0;
+  width: 100%;
+  z-index: 1000;
+  background-color: #f8f9fa;
+  border-top: 1px solid #dee2e6;
 }
 
 
@@ -233,7 +259,7 @@ text-align: center;
 
 .user-internal-box{
   height: auto;
-  width: 90%;
+  width: 100%;
   max-width: 1200px;
   display: flex;
   flex-direction: row;

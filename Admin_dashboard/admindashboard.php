@@ -121,6 +121,7 @@ $overdue_books_result = mysqli_query($conn, $overdue_books_query);
   include("navbar_admin.php");
   ?>
 
+  <div class="main-content">
   <!-- welcome heading -->
   <div class="user-dheading">
     <h1 style="color: #dc3545;" class="user-dtext">Welcome Library Administrator</h1>
@@ -319,6 +320,7 @@ $overdue_books_result = mysqli_query($conn, $overdue_books_query);
         <?php endif; ?>
       </div>
     </div>
+  </div>
   </div>
   <?php
   include("footer.php");

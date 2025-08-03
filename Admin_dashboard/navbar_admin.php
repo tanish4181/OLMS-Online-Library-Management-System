@@ -14,7 +14,8 @@
             </button>
 
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <!-- Centered navigation tabs -->
+                <ul class="navbar-nav mx-auto">
                     <li class="nav-item">
                         <a class="nav-link" href="./admindashboard.php">Home</a>
                     </li>
@@ -31,6 +32,8 @@
                         <a class="nav-link" href="return_book.php">Return Books</a>
                     </li>
                 </ul>
+                
+                <!-- Logout button on the right -->
                 <div class="d-flex">
                     <a href="../logout.php" class="btn btn-outline-light">Logout</a>
                 </div>

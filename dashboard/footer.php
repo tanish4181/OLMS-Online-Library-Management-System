@@ -1,5 +1,5 @@
     <!-- footer -->
-     <footer class="bg-primary text-white py-5 mt-5">
+     <footer id="footer" class="bg-primary text-white py-5 mt-5">
         <div class="container">
 
             <!-- Footer Bottom -->
@@ -11,8 +11,8 @@
                     </p>
                 </div>
                 <div class="col-md-6 text-md-end">
-                    <a href="#" class="text-white-50 text-decoration-none me-3 small">Privacy Policy</a>
-                    <a href="#" class="text-white-50 text-decoration-none small">Terms of Service</a>
+                    <a href="./browse_books.php" class="text-white-50 text-decoration-none me-3 small">Browse Books</a>
+                    <a href="./my_books.php" class="text-white-50 text-decoration-none small">My books</a>
                 </div>
             </div>
         </div>

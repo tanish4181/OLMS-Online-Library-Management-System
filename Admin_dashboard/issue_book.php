@@ -84,6 +84,7 @@ $default_due_date = date('Y-m-d', strtotime('+14 days'));
     <!-- Include admin navbar -->
     <?php include("navbar_admin.php"); ?>
     
+    <div class="main-content">
     <div class="container mt-4">
         <div class="row">
             <div class="col-md-12">
@@ -211,6 +212,7 @@ $default_due_date = date('Y-m-d', strtotime('+14 days'));
                 </div>
             </div>
         </div>
+    </div>
     </div>
   <?php
   include("footer.php");

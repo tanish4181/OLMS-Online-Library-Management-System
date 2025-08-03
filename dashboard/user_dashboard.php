@@ -57,6 +57,7 @@ if (isset($_SESSION['user_id']) && $_SESSION['role'] == 'user') {
   <body class="user-dashboard">
     <!-- Navbar -->
 <?php include("./user_header.php"); ?>
+    <div class="main-content">
     <!-- welcome heading -->
     <div class="user-dheading container">
       <h1 class="user-dtext">Welcome to Your Dashboard!</h1>
@@ -192,6 +193,7 @@ if (isset($_SESSION['user_id']) && $_SESSION['role'] == 'user') {
           </div>
         </div>
       <?php } ?>
+    </div>
     </div>
    <?php
     include("footer.php");

@@ -87,7 +87,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <label class="my-2" for="password">Password</label>
             <input type="password" name="password" class="form-control" required placeholder="Password" />
 
-            <button type="submit" class="user-btn btn btn-primary mt-3">
+            <button type="submit" class="user-btn btn btn-warning mt-3">
               <i class="bi-shield-check me-2"></i>User Login
             </button>
           </form>

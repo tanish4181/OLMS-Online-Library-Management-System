@@ -17,6 +17,7 @@
     include("navbar.php");
     ?>
   
+    <div class="main-content">
     <!-- Heading -->
     <div class="text-center py-4 text-white home-heading">
       <h1 class="fw-bold">OLMS – Your Digital Library Portal</h1>
@@ -129,6 +130,7 @@
           </div>
         </div>
       </div>
+    </div>
     </div>
     <!-- footer -->
      <?php
