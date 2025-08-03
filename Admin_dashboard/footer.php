@@ -1,4 +1,4 @@
- <footer id="footer" class="py-4" style="background-color: #dc3545;">
+ <footer  class="py-4" style="background-color: #dc3545;">
         <div class="container-fluid">
 
             <!-- Footer Bottom -->

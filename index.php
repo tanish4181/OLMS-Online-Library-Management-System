@@ -134,7 +134,7 @@
     </div>
     <!-- footer -->
      <?php
-    include("footer.php");
+    include("home_footer.php");
     ?>
   </body>
 </html>

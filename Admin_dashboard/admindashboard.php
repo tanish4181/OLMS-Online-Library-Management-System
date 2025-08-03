@@ -133,7 +133,7 @@ $overdue_books_result = mysqli_query($conn, $overdue_books_query);
     <div class="row">
       <div class="col-md-12">
         <div class="alert alert-info" style="text-align: center;">
-          <strong>📊 System Statistics Summary:</strong> 
+          <strong>System Statistics Summary:</strong> 
           Total Users: <span class="badge bg-primary"><?php echo $total_all_users; ?></span> | 
           Regular Members: <span class="badge bg-success"><?php echo $total_users; ?></span> | 
           Administrators: <span class="badge bg-warning"><?php echo $total_admins; ?></span>
@@ -202,7 +202,7 @@ $overdue_books_result = mysqli_query($conn, $overdue_books_query);
     <div class="row">
       <div class="col-md-12">
         <div class="alert alert-success" style="text-align: center;">
-          <strong>📚 Books Database Active:</strong><br>
+          <strong>Books Database Active:</strong><br>
           <small>Total Books: <?php echo $total_books; ?> | Total Copies: <?php echo $total_quantity; ?> | Borrowed: <?php echo $borrowed_books; ?></small>
         </div>
       </div>
