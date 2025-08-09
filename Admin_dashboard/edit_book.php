@@ -11,7 +11,7 @@ if (isset($_POST['edit_book'])) {
   $sql = "UPDATE books SET title='$title', author='$author', quantity='$quantity', category='$category' WHERE id='$id'";
   mysqli_query($conn, $sql);
 
-  header("Location: manage_books.php"); // change this to your page
+  header("Location: manage_books.php");
   exit();
 }
 ?>

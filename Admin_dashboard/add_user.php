@@ -2,21 +2,21 @@
 $success = $error = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Connect to database
+
     $conn = mysqli_connect("localhost", "root", "", "olms");
 
     if (!$conn) {
         die("Connection failed: " . mysqli_connect_error());
     }
 
-    // Get input values
+
     $username = $_POST['username'];
     $email = $_POST['email'];
     $fullname = $_POST['fullname'];
     $address = $_POST['address'];
     $password = $_POST['password'];
 
-    // Hash the password before storing
+
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
     // Insert data

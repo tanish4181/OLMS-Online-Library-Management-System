@@ -1,8 +1,8 @@
 <?php
-$host = "localhost";       // usually localhost
-$username = "root";        // default XAMPP/WAMP username
-$password = "";            // default XAMPP/WAMP password is empty
-$database = "olms";        // your database name
+$host = "localhost";
+$username = "root";
+$password = "";
+$database = "olms";
 
 $conn = mysqli_connect($host, $username, $password, $database);
 
