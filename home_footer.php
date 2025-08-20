@@ -8,12 +8,12 @@
         </a>
         <ul class="nav col-md-4 justify-content-end">
           <li class="nav-item">
-            <a href="/olms/index.php" class="nav-link px-2 text-body-secondary"
+            <a href="./index.php" class="nav-link px-2 text-body-secondary"
               >Home</a
             >
           </li>
           <li class="nav-item">
-            <a href="/olms/about.php" class="nav-link px-2 text-body-secondary"
+            <a href="about.php" class="nav-link px-2 text-body-secondary"
               >About</a
             >
           </li>

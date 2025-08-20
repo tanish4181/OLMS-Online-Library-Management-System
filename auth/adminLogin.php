@@ -1,4 +1,11 @@
 <?php
+
+
+
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 // Start the session to store admin data
 session_start();
 
@@ -31,7 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION["admin_email"] = $admin["email"];
             $_SESSION["admin_name"] = $admin["fullname"];
             $_SESSION["sta"] = $email; // Keep for backward compatibility
-            header("Location: /olms/Admin_dashboard/admindashboard.php");
+            header("Location: ../Admin_dashboard/admindashboard.php");
             exit();
         } else {
             // Password is wrong

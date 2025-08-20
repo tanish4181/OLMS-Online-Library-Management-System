@@ -123,7 +123,7 @@
 
             <a href="#" class="btn btn-primary me-2 mt-3">Explore Books</a>
             <a
-              href="/auth/UserLogin.html"
+              href="./auth/UserLogin.php"
               class="btn btn-outline-secondary mt-3"
               >Login Now</a
             >
