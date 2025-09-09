@@ -63,12 +63,12 @@ if ($result_quantity) {
 $check_borrowing_table = "SHOW TABLES LIKE 'book_issues'";
 $borrowing_table_exists = mysqli_query($conn, $check_borrowing_table);
 if ($borrowing_table_exists && mysqli_num_rows($borrowing_table_exists) > 0) {
-    $sql_borrowed = "SELECT COUNT(*) as borrowed_books FROM book_issues WHERE status = 'issued'";
-    $result_borrowed = mysqli_query($conn, $sql_borrowed);
-    if ($result_borrowed) {
-        $data_borrowed = mysqli_fetch_assoc($result_borrowed);
-        $borrowed_books = $data_borrowed['borrowed_books'];
-    }
+  $sql_borrowed = "SELECT COUNT(*) as borrowed_books FROM book_issues WHERE status IN ('issued', 'overdue')";
+  $result_borrowed = mysqli_query($conn, $sql_borrowed);
+  if ($result_borrowed) {
+    $data_borrowed = mysqli_fetch_assoc($result_borrowed);
+    $borrowed_books = $data_borrowed['borrowed_books'];
+  }
 }
 
 // Get recent books for display

@@ -1,11 +1,13 @@
 <?php
+
+
 // Start the session to check if admin is logged in
 session_start();
 
 // Check if admin is logged in
 if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
-    header("Location: ../auth/adminLogin.php");
-    exit();
+  header("Location: ../auth/adminLogin.php");
+  exit();
 }
 ?>
 <!DOCTYPE html>
@@ -26,8 +28,8 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
   include("navbar_admin.php");
   ?>
   <?php
-// Include the database connection file
-include("config.php");
+// Include the correct database connection file for hosting
+include("../database/config.php");
 
 // Check if the form was submitted
 if (isset($_POST['add'])) {
@@ -38,26 +40,26 @@ if (isset($_POST['add'])) {
     $quantity = $_POST['quantity'];
     $description = $_POST['description'];
 
-    // Handle file upload
-    $filename = $_FILES["cover"]["name"];
-    $tempname = $_FILES["cover"]["tmp_name"];
-    $folder = "../uploads/" . $filename; // Create this folder if not exists
-
-    // Move the uploaded file to our uploads folder
-    move_uploaded_file($tempname, $folder);
-
-    // Insert the book into the database
+  // Handle file upload
+  $filename = $_FILES["cover"]["name"];
+  $tempname = $_FILES["cover"]["tmp_name"];
+  $folder = "uploads/" . $filename;
+  if (!is_dir("uploads")) {
+    mkdir("uploads", 0755, true);
+  }
+  $uploadSuccess = move_uploaded_file($tempname, $folder);
+  if ($uploadSuccess) {
     $sql = "INSERT INTO books (title, cover, author, category, quantity, description) 
-            VALUES ('$title', '$folder', '$author', '$category', '$quantity', '$description')";
-
+        VALUES ('$title', '$folder', '$author', '$category', '$quantity', '$description')";
     $run = mysqli_query($conn, $sql);
-
-    // Check if the insert was successful
     if ($run) {
-        echo "<script>alert('Book added successfully');</script>";
+      echo "<script>alert('Book added successfully');</script>";
     } else {
-        echo "<script>alert('Failed to add book');</script>";
+      echo "<script>alert('Failed to add book to database.');</script>";
     }
+  } else {
+    echo "<script>alert('Failed to upload cover image.');</script>";
+  }
 }
 ?>
 
