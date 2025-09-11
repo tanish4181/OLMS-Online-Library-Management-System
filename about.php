@@ -39,12 +39,12 @@
             <p class="text-muted"></p>
             <p class="small"></p>
             <div>
-              <a href="https://github.com/tanish418"
+              <a href="https://github.com/tanish4181"
                 ><button id="github-link-button">
                   <i class="fab fa-github"></i>GitHub
                   </button
               ></a>
-              <a href="https://www.linkedin.com/in/tanish-sharma-ts4181/"
+              <a href="https://www.linkedin.com/in/tanish4181"
                 ><button id="linkedin-link-button">
                   <i class="fa-brands fa-linkedin-in"></i>Linkedin
                 </button></a

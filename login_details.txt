@@ -1,0 +1,12 @@
+admin credential id: admin@olms password: 12345
+user credential id: tanish@gmail.com password: tanish@
+
+Instructions to set up the database in phpMyAdmin:
+1. Open XAMPP Control Panel and start Apache and MySQL.
+2. Open your browser and go to http://localhost/phpmyadmin
+3. Click on 'Import' in the top menu.
+4. Click 'Choose File' and select the file: database/complete_olms_database.sql from this project folder.
+5. Click 'Go' to import the database.
+6. After successful import, the OLMS database will be available for use.
+
+You can now log in with the above credentials.
