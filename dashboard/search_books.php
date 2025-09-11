@@ -1,35 +1,22 @@
 <?php
-// Start the session to check if user is logged in
+// search books
 session_start();
-
-// Check if user is logged in
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'user') {
     header("Location: ../auth/UserLogin.php");
     exit();
 }
-
-// Include the database connection file
-include("../database/config.php");
-
-// Set default values for our variables
+include __DIR__ . '/../database/config.php';
 $search_results = [];
 $search_performed = false;
 $search_term = "";
-
-// Check if the search form was submitted
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['search'])) {
-    // Get the search term from the form
     $search_term = trim($_POST['search_term']);
     $search_performed = true;
-    
-    // Only search if the search term is not empty
     if (!empty($search_term)) {
-        // Search by title or author using LIKE for partial matches
         $search_query = "SELECT * FROM books WHERE 
                         title LIKE '%$search_term%' OR 
                         author LIKE '%$search_term%' 
                         ORDER BY title";
-        
         $search_results = mysqli_query($conn, $search_query);
     }
 }
@@ -47,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['search'])) {
 </head>
 <body class="user-dashboard">
     <!-- Include user header -->
-    <?php include("./user_header.php"); ?>
+    <?php include __DIR__ . '/user_header.php'; ?>
     
     <div class="container mt-4" style="height: 54.4vh;">
         <div class="row">
@@ -137,7 +124,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['search'])) {
         </div>
     </div>
    <?php
-    include("footer.php");
+    include __DIR__ . '/footer.php';
     ?>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

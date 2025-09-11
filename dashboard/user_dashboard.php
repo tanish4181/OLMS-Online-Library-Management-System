@@ -1,45 +1,31 @@
 <?php
-// Start the session to check if user is logged in
+// user dashboard
 session_start();
-
-// Include the database connection file
-include("../database/config.php");
-
-// Set default values for our variables
+include __DIR__ . '/../database/config.php';
 $totalBooks = 0;
 $activeBorrow = 0;
 $categories = 0;
-
-// Check if user is logged in
 if (isset($_SESSION['user_id']) && $_SESSION['role'] == 'user') {
-    $user_id = $_SESSION['user_id'];
-    
-    // Count total number of books in the library
-    $totalBooksQuery = "SELECT COUNT(*) as total FROM books";
-    $totalBooksResult = mysqli_query($conn, $totalBooksQuery);
-    if ($totalBooksResult) {
-        $totalBooks = mysqli_fetch_assoc($totalBooksResult)['total'];
-    }
-
-    // Count how many different categories of books we have
-    $categoriesQuery = "SELECT COUNT(DISTINCT category) as total_categories FROM books";
-    $categoriesResult = mysqli_query($conn, $categoriesQuery);
-    if ($categoriesResult) {
-        $categories = mysqli_fetch_assoc($categoriesResult)['total_categories'];
-    }
-
-    // Check if the book_issues table exists
-    $check_borrowing_table = "SHOW TABLES LIKE 'book_issues'";
-    $borrowing_table_exists = mysqli_query($conn, $check_borrowing_table);
-    
-    // If book_issues table exists, count how many books this user has borrowed
-    if ($borrowing_table_exists && mysqli_num_rows($borrowing_table_exists) > 0) {
-    $activeBorrowQuery = "SELECT COUNT(*) as active FROM book_issues WHERE user_id = '$user_id' AND status IN ('issued', 'overdue')";
-    $activeBorrowResult = mysqli_query($conn, $activeBorrowQuery);
-    if ($activeBorrowResult) {
-      $activeBorrow = mysqli_fetch_assoc($activeBorrowResult)['active'];
-    }
-    }
+  $user_id = $_SESSION['user_id'];
+  $totalBooksQuery = "SELECT COUNT(*) as total FROM books";
+  $totalBooksResult = mysqli_query($conn, $totalBooksQuery);
+  if ($totalBooksResult) {
+    $totalBooks = mysqli_fetch_assoc($totalBooksResult)['total'];
+  }
+  $categoriesQuery = "SELECT COUNT(DISTINCT category) as total_categories FROM books";
+  $categoriesResult = mysqli_query($conn, $categoriesQuery);
+  if ($categoriesResult) {
+    $categories = mysqli_fetch_assoc($categoriesResult)['total_categories'];
+  }
+  $check_borrowing_table = "SHOW TABLES LIKE 'book_issues'";
+  $borrowing_table_exists = mysqli_query($conn, $check_borrowing_table);
+  if ($borrowing_table_exists && mysqli_num_rows($borrowing_table_exists) > 0) {
+  $activeBorrowQuery = "SELECT COUNT(*) as active FROM book_issues WHERE user_id = '$user_id' AND status IN ('issued', 'overdue')";
+  $activeBorrowResult = mysqli_query($conn, $activeBorrowQuery);
+  if ($activeBorrowResult) {
+    $activeBorrow = mysqli_fetch_assoc($activeBorrowResult)['active'];
+  }
+  }
 }
 ?>
 <!DOCTYPE html>
@@ -56,7 +42,7 @@ if (isset($_SESSION['user_id']) && $_SESSION['role'] == 'user') {
   </head>
   <body class="user-dashboard">
     <!-- Navbar -->
-<?php include("./user_header.php"); ?>
+<?php include __DIR__ . '/user_header.php'; ?>
     <div class="main-content">
     <!-- welcome heading -->
     <div class="user-dheading container">
@@ -196,7 +182,7 @@ if (isset($_SESSION['user_id']) && $_SESSION['role'] == 'user') {
     </div>
     </div>
    <?php
-    include("footer.php");
+  include __DIR__ . '/footer.php';
     ?>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   </body>

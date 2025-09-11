@@ -1,48 +1,31 @@
+
 <?php
-// Start the session to check if admin is logged in
 session_start();
-
-// Check if admin is logged in
 if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
-    header("Location: ../auth/adminLogin.php");
-    exit();
+  header("Location: ../auth/adminLogin.php");
+  exit();
 }
-
-// Variables to store success and error messages
 $success = "";
 $error = "";
-
-// Check if the form was submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Connect to database
-    $conn = mysqli_connect("localhost", "root", "", "olms");
-
-    if (!$conn) {
-        die("Connection failed: " . mysqli_connect_error());
-    }
-
-    // Get the form data
-    $username = $_POST['username'];
-    $email = $_POST['email'];
-    $fullname = $_POST['fullname'];
-    $address = $_POST['address'];
-    $password = $_POST['password'];
-
-    // Hash the password before storing it in the database
-    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-
-    // Insert the new user into the database
-    $sql = "INSERT INTO users (username, email, fullname, address, password) 
-            VALUES ('$username', '$email', '$fullname', '$address', '$hashed_password')";
-
-    if (mysqli_query($conn, $sql)) {
-       $success = "User '$username' added successfully!";
-    } else {
-        $error = "Error: " . mysqli_error($conn);
-    }
-
-    // Close the database connection
-    mysqli_close($conn);
+  $conn = mysqli_connect("localhost", "root", "", "olms");
+  if (!$conn) {
+    die("Connection failed: " . mysqli_connect_error());
+  }
+  $username = $_POST['username'];
+  $email = $_POST['email'];
+  $fullname = $_POST['fullname'];
+  $address = $_POST['address'];
+  $password = $_POST['password'];
+  $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+  $sql = "INSERT INTO users (username, email, fullname, address, password) 
+      VALUES ('$username', '$email', '$fullname', '$address', '$hashed_password')";
+  if (mysqli_query($conn, $sql)) {
+     $success = "User '$username' added successfully!";
+  } else {
+    $error = "Error: " . mysqli_error($conn);
+  }
+  mysqli_close($conn);
 }
 ?>
 
@@ -56,7 +39,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
 </head>
 <body class="addUser">
-  <?php include("navbar_admin.php"); ?>
+  <?php include __DIR__ . '/navbar_admin.php'; ?>
 
   <div class="add_user-box">
     <h1>Add User</h1>

@@ -1,10 +1,8 @@
+
+
+
 <?php
-
-
-// Start the session to check if admin is logged in
 session_start();
-
-// Check if admin is logged in
 if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
   header("Location: ../auth/adminLogin.php");
   exit();
@@ -25,43 +23,37 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
 
 <body class="addUser">
   <?php
-  include("navbar_admin.php");
+  include __DIR__ . '/navbar_admin.php';
   ?>
   <?php
-// Include the correct database connection file for hosting
-include("../database/config.php");
-
-// Check if the form was submitted
-if (isset($_POST['add'])) {
-    // Get the form data
+  include __DIR__ . '/../database/config.php';
+  if (isset($_POST['add'])) {
     $title = $_POST['title'];
     $author = $_POST['author'];
     $category = $_POST['category'];
     $quantity = $_POST['quantity'];
     $description = $_POST['description'];
-
-  // Handle file upload
-  $filename = $_FILES["cover"]["name"];
-  $tempname = $_FILES["cover"]["tmp_name"];
-  $folder = "uploads/" . $filename;
-  if (!is_dir("uploads")) {
-    mkdir("uploads", 0755, true);
-  }
-  $uploadSuccess = move_uploaded_file($tempname, $folder);
-  if ($uploadSuccess) {
-    $sql = "INSERT INTO books (title, cover, author, category, quantity, description) 
-        VALUES ('$title', '$folder', '$author', '$category', '$quantity', '$description')";
-    $run = mysqli_query($conn, $sql);
-    if ($run) {
-      echo "<script>alert('Book added successfully');</script>";
-    } else {
-      echo "<script>alert('Failed to add book to database.');</script>";
+    $filename = $_FILES["cover"]["name"];
+    $tempname = $_FILES["cover"]["tmp_name"];
+    $folder = "uploads/" . $filename;
+    if (!is_dir("uploads")) {
+      mkdir("uploads", 0755, true);
     }
-  } else {
-    echo "<script>alert('Failed to upload cover image.');</script>";
+    $uploadSuccess = move_uploaded_file($tempname, $folder);
+    if ($uploadSuccess) {
+      $sql = "INSERT INTO books (title, cover, author, category, quantity, description) 
+          VALUES ('$title', '$folder', '$author', '$category', '$quantity', '$description')";
+      $run = mysqli_query($conn, $sql);
+      if ($run) {
+        echo "<script>alert('Book added successfully');</script>";
+      } else {
+        echo "<script>alert('Failed to add book to database.');</script>";
+      }
+    } else {
+      echo "<script>alert('Failed to upload cover image.');</script>";
+    }
   }
-}
-?>
+  ?>
 
   <div class="add_user-box" style="height: 120vh;">
     <h1>Add book</h1>

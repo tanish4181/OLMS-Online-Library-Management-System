@@ -1,34 +1,20 @@
 <?php
-// Start the session to check if user is logged in
+// user books
 session_start();
-
-// Check if user is logged in
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'user') {
     header("Location: ../auth/UserLogin.php");
     exit();
 }
-
-// Include the database connection file
-include("../database/config.php");
-
-// Include the fine calculator file
-include("../includes/fine_calculator.php");
-
-// Get the user ID from the session
+include __DIR__ . '/../database/config.php';
+include __DIR__ . '/../includes/fine_calculator.php';
 $user_id = $_SESSION['user_id'];
-
-// Update all fines first (for display purposes only)
 updateAllFines($conn);
-
-// Get user's current book issues
 $current_issues_query = "SELECT bi.*, b.title, b.author, b.cover 
                         FROM book_issues bi 
                         JOIN books b ON bi.book_id = b.id 
                         WHERE bi.user_id = '$user_id' AND bi.status IN ('issued', 'overdue') 
                         ORDER BY bi.issue_date DESC";
 $current_issues = mysqli_query($conn, $current_issues_query);
-
-// Get user's book history (returned books)
 $book_history_query = "SELECT bi.*, b.title, b.author, b.cover 
                       FROM book_issues bi 
                       JOIN books b ON bi.book_id = b.id 
@@ -49,7 +35,7 @@ $book_history = mysqli_query($conn, $book_history_query);
 </head>
 <body class="user-dashboard">
     <!-- Include user header -->
-    <?php include("./user_header.php"); ?>
+    <?php include __DIR__ . '/user_header.php'; ?>
     
     <div class="container mt-4">
         <div class="row">
@@ -170,7 +156,7 @@ $book_history = mysqli_query($conn, $book_history_query);
         </div>
     </div>
    <?php
-    include("footer.php");
+    include __DIR__ . '/footer.php';
     ?>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     

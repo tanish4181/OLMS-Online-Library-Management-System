@@ -1,8 +1,5 @@
-    <!-- footer -->
      <footer class="bg-primary text-white py-5 mt-5">
         <div class="container">
-
-            <!-- Footer Bottom -->
             <hr class="my-4 border-white-50">
             <div class="row align-items-center">
                 <div class="col-md-6">

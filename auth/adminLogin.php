@@ -1,56 +1,36 @@
+
+
+
 <?php
-
-
-
+// admin login
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
-
-// Start the session to store admin data
 session_start();
-
-// Include the database connection file
-require("../database/config.php");
-
-// Variable to store error message
+require __DIR__ . '/../database/config.php';
 $message = "";
-
-// Check if the form was submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Get the email and password from the form
-    $email = mysqli_real_escape_string($conn, $_POST["email"]);
-    $passwordInput = $_POST["password"];
-
-    // Create SQL query to find user with this email and admin role
-    $sql = "SELECT * FROM users WHERE email = '$email' AND role = 'admin'";
-    $result = mysqli_query($conn, $sql);
-
-    // Check if we found an admin with this email
-    if ($result && mysqli_num_rows($result) == 1) {
-        // Get the admin data
-        $admin = mysqli_fetch_assoc($result);
-
-        // Check if the password is correct
-        if (password_verify($passwordInput, $admin["password"])) {
-            // Password is correct, so log the admin in
-            $_SESSION["admin_logged_in"] = true;
-            $_SESSION["admin_id"] = $admin["id"];
-            $_SESSION["admin_email"] = $admin["email"];
-            $_SESSION["admin_name"] = $admin["fullname"];
-            $_SESSION["sta"] = $email; // Keep for backward compatibility
-            header("Location: ../Admin_dashboard/admindashboard.php");
-            exit();
-        } else {
-            // Password is wrong
-            $message = "Incorrect password. Please check again.";
-        }
+  $email = mysqli_real_escape_string($conn, $_POST["email"]);
+  $passwordInput = $_POST["password"];
+  $sql = "SELECT * FROM users WHERE email = '$email' AND role = 'admin'";
+  $result = mysqli_query($conn, $sql);
+  if ($result && mysqli_num_rows($result) == 1) {
+    $admin = mysqli_fetch_assoc($result);
+    if (password_verify($passwordInput, $admin["password"])) {
+      $_SESSION["admin_logged_in"] = true;
+      $_SESSION["admin_id"] = $admin["id"];
+      $_SESSION["admin_email"] = $admin["email"];
+      $_SESSION["admin_name"] = $admin["fullname"];
+      $_SESSION["sta"] = $email;
+      header("Location: ../Admin_dashboard/admindashboard.php");
+      exit();
     } else {
-        // No admin found with this email or user is not an admin
-        $message = "Admin access denied. Invalid credentials or insufficient privileges.";
+      $message = "Incorrect password. Please check again.";
     }
-
-    // Close the database connection
-    mysqli_close($conn);
+  } else {
+    $message = "Admin access denied. Invalid credentials or insufficient privileges.";
+  }
+  mysqli_close($conn);
 }
 ?>
 
@@ -64,11 +44,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
-  <link rel="stylesheet" href="/OLMS/asset/style.css" />
+  <link rel="stylesheet" href="/olms/asset/style.css" />
 </head>
 
 <body>
-  <?php include("../navbar.php"); ?>
+  <?php include __DIR__ . '/../navbar.php'; ?>
   <section class="bg"></section>
   <section class="to-check">
     <div class="form-box">

@@ -1,42 +1,25 @@
-<?php
-// Start the session to check if admin is logged in
-session_start();
 
-// Check if admin is logged in
+<?php
+session_start();
 if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
     header("Location: ../auth/adminLogin.php");
     exit();
 }
-
-// Include the database connection file
-include("../database/config.php");
-
-// Variables to store messages
+include __DIR__ . '/../database/config.php';
 $message = "";
 $message_type = "";
-
-// Check if the form was submitted
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['issue_book'])) {
-    // Get the form data
     $user_id = $_POST['user_id'];
     $book_id = $_POST['book_id'];
     $due_date = $_POST['due_date'];
-    
-    // Check if all fields are filled
     if ($user_id && $book_id && $due_date) {
-        // Check if the book is available (has quantity > 0)
         $check_availability = "SELECT quantity FROM books WHERE id = '$book_id'";
         $result = mysqli_query($conn, $check_availability);
         $book = mysqli_fetch_assoc($result);
-        
         if ($book['quantity'] > 0) {
-            // Insert the book issue record
             $issue_query = "INSERT INTO book_issues (user_id, book_id, due_date, status) VALUES ('$user_id', '$book_id', '$due_date', 'issued')";
-            
             if (mysqli_query($conn, $issue_query)) {
-                // Reduce the book quantity by 1
                 $update_quantity = "UPDATE books SET quantity = quantity - 1 WHERE id = '$book_id'";
-                
                 if (mysqli_query($conn, $update_quantity)) {
                     $message = "Book issued successfully!";
                     $message_type = "success";
@@ -57,16 +40,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['issue_book'])) {
         $message_type = "warning";
     }
 }
-
-// Get all users for the dropdown
 $users_query = "SELECT id, fullname, username FROM users WHERE role = 'user' ORDER BY fullname";
 $users_result = mysqli_query($conn, $users_query);
-
-// Get all available books for the dropdown
 $books_query = "SELECT id, title, author, quantity FROM books WHERE quantity > 0 ORDER BY title";
 $books_result = mysqli_query($conn, $books_query);
-
-// Set default due date (14 days from now)
 $default_due_date = date('Y-m-d', strtotime('+14 days'));
 ?>
 
@@ -82,7 +59,7 @@ $default_due_date = date('Y-m-d', strtotime('+14 days'));
 </head>
 <body class="admin-dashboard">
     <!-- Include admin navbar -->
-    <?php include("navbar_admin.php"); ?>
+    <?php include __DIR__ . '/navbar_admin.php'; ?>
     
     <div class="main-content">
     <div class="container mt-4">
@@ -215,7 +192,7 @@ $default_due_date = date('Y-m-d', strtotime('+14 days'));
     </div>
     </div>
   <?php
-  include("footer.php");
+    include __DIR__ . '/footer.php';
   ?>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

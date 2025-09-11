@@ -1,21 +1,13 @@
 <?php
-// Start the session to check if user is logged in
+// browse books
 session_start();
-
-// Check if user is logged in
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] != 'user') {
     header("Location: ../auth/UserLogin.php");
     exit();
 }
-
-// Include the database connection file
-include("../database/config.php");
-
-// Get all books from the database
+include __DIR__ . '/../database/config.php';
 $books_query = "SELECT * FROM books ORDER BY title";
 $books_result = mysqli_query($conn, $books_query);
-
-// Count how many books we have
 $total_books = mysqli_num_rows($books_result);
 ?>
 
@@ -31,7 +23,7 @@ $total_books = mysqli_num_rows($books_result);
 </head>
 <body class="user-dashboard">
     <!-- Include user header -->
-    <?php include("./user_header.php"); ?>
+    <?php include __DIR__ . '/user_header.php'; ?>
     
     <div class="container mt-4">
         <div class="row">
@@ -89,7 +81,7 @@ $total_books = mysqli_num_rows($books_result);
         </div>
     </div>
    <?php
-    include("footer.php");
+    include __DIR__ . '/footer.php';
     ?>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

@@ -13,7 +13,7 @@
 
 <body class="admin-dashboard">
   <?php
-  include("navbar_admin.php");
+  include __DIR__ . '/navbar_admin.php';
   ?>
   <!-- manage user -->
 
@@ -38,7 +38,7 @@
         </thead>
         <tbody>
         <?php
-        include("config.php");
+  include __DIR__ . '/config.php';
 
         // Pagination setup
         $limit = 5;
@@ -179,7 +179,7 @@
     </div>
   </div>
     <?php
-  include("footer.php");
+  include __DIR__ . '/footer.php';
   ?>
   <?php endforeach; ?>
 

@@ -1,23 +1,14 @@
-<?php
-// Start the session to check if admin is logged in
-session_start();
 
-// Check if admin is logged in
+<?php
+session_start();
 if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
     header("Location: ../auth/adminLogin.php");
     exit();
 }
-
-// Include the database connection file
-include("../database/config.php");
-
-// Variables to store messages
+include __DIR__ . '/../database/config.php';
 $message = "";
 $message_type = "";
-
-// Check if the form was submitted
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Handle adding a new book
     if (isset($_POST['add_book'])) {
         $title = trim($_POST['title']);
         $author = trim($_POST['author']);
@@ -25,11 +16,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $quantity = (int)$_POST['quantity'];
         $description = trim($_POST['description']);
         $cover = $_POST['cover'] ?: 'https://via.placeholder.com/190x260?text=Book+Cover';
-        
-        // Check if all required fields are filled
         if ($title && $author && $category && $quantity > 0) {
             $insert_query = "INSERT INTO books (title, author, category, quantity, description, cover) VALUES ('$title', '$author', '$category', '$quantity', '$description', '$cover')";
-            
             if (mysqli_query($conn, $insert_query)) {
                 $message = "Book added successfully!";
                 $message_type = "success";
@@ -41,9 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $message = "Please fill all required fields.";
             $message_type = "warning";
         }
-    } 
-    // Handle editing a book
-    elseif (isset($_POST['edit_book'])) {
+    } elseif (isset($_POST['edit_book'])) {
         $book_id = $_POST['book_id'];
         $title = trim($_POST['title']);
         $author = trim($_POST['author']);
@@ -51,11 +37,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $quantity = (int)$_POST['quantity'];
         $description = trim($_POST['description']);
         $cover = $_POST['cover'] ?: 'https://via.placeholder.com/190x260?text=Book+Cover';
-        
-        // Check if all required fields are filled
         if ($title && $author && $category && $quantity >= 0) {
             $update_query = "UPDATE books SET title = '$title', author = '$author', category = '$category', quantity = '$quantity', description = '$description', cover = '$cover' WHERE id = '$book_id'";
-            
             if (mysqli_query($conn, $update_query)) {
                 $message = "Book updated successfully!";
                 $message_type = "success";
@@ -67,22 +50,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $message = "Please fill all required fields.";
             $message_type = "warning";
         }
-    } 
-    // Handle deleting a book
-    elseif (isset($_POST['delete_book'])) {
+    } elseif (isset($_POST['delete_book'])) {
         $book_id = $_POST['book_id'];
-        
-        // Check if book is currently issued
         $check_issued = "SELECT COUNT(*) as issued_count FROM book_issues WHERE book_id = '$book_id' AND status IN ('issued', 'overdue')";
         $result = mysqli_query($conn, $check_issued);
         $issued_count = mysqli_fetch_assoc($result)['issued_count'];
-        
         if ($issued_count > 0) {
             $message = "Cannot delete book. It has " . $issued_count . " active issue(s).";
             $message_type = "warning";
         } else {
             $delete_query = "DELETE FROM books WHERE id = '$book_id'";
-            
             if (mysqli_query($conn, $delete_query)) {
                 $message = "Book deleted successfully!";
                 $message_type = "success";
@@ -93,12 +70,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
 }
-
-// Get all books from the database
 $books_query = "SELECT * FROM books ORDER BY title";
 $books_result = mysqli_query($conn, $books_query);
-
-// Get unique categories for the dropdown
 $categories_query = "SELECT DISTINCT category FROM books ORDER BY category";
 $categories_result = mysqli_query($conn, $categories_query);
 $categories = [];
@@ -119,7 +92,7 @@ while ($row = mysqli_fetch_assoc($categories_result)) {
 </head>
 <body class="admin-dashboard">
     <!-- Include admin navbar -->
-    <?php include("navbar_admin.php"); ?>
+    <?php include __DIR__ . '/navbar_admin.php'; ?>
     
     <div class="main-content">
     <div class="container mt-4">
@@ -353,7 +326,7 @@ while ($row = mysqli_fetch_assoc($categories_result)) {
     </div>
     </div>
   <?php
-  include("footer.php");
+    include __DIR__ . '/footer.php';
   ?>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>

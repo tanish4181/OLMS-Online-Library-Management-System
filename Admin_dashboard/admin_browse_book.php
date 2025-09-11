@@ -1,23 +1,14 @@
-<?php
-// Start the session to check if admin is logged in
-session_start();
 
-// Check if admin is logged in
+<?php
+session_start();
 if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
     header("Location: ../auth/adminLogin.php");
     exit();
 }
-
-// Include the database connection file
-include("../database/config.php");
-
-// Variables to store messages
+include __DIR__ . '/../database/config.php';
 $message = "";
 $message_type = "";
-
-// Check if the form was submitted
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Handle editing a book
     if (isset($_POST['edit_book'])) {
         $book_id = $_POST['book_id'];
         $title = trim($_POST['title']);
@@ -25,27 +16,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $category = trim($_POST['category']);
         $quantity = (int)$_POST['quantity'];
         $description = trim($_POST['description']);
-
-        // Handle file upload for cover image
-        $cover = $_POST['current_cover']; // Keep current cover by default
-
+        $cover = $_POST['current_cover'];
         if (isset($_FILES['cover']) && $_FILES['cover']['error'] == 0) {
             $upload_dir = '../uploads/covers/';
-
-            // Create directory if it doesn't exist
             if (!file_exists($upload_dir)) {
                 mkdir($upload_dir, 0777, true);
             }
-
             $file_extension = strtolower(pathinfo($_FILES['cover']['name'], PATHINFO_EXTENSION));
             $allowed_extensions = ['jpg', 'jpeg', 'png', 'gif'];
-
             if (in_array($file_extension, $allowed_extensions)) {
                 $new_filename = 'book_' . $book_id . '_' . time() . '.' . $file_extension;
                 $target_path = $upload_dir . $new_filename;
-
                 if (move_uploaded_file($_FILES['cover']['tmp_name'], $target_path)) {
-                    // Delete old cover file if it exists and is not a placeholder
                     if ($cover && $cover != 'https://via.placeholder.com/190x260?text=Book+Cover' && file_exists($cover)) {
                         unlink($cover);
                     }
@@ -59,16 +41,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $message_type = "warning";
             }
         }
-
-        // If no cover is set, use placeholder
         if (empty($cover)) {
             $cover = 'https://via.placeholder.com/190x260?text=Book+Cover';
         }
-
-        // Check if all required fields are filled
         if ($title && $author && $category && $quantity >= 0) {
             $update_query = "UPDATE books SET title = '$title', author = '$author', category = '$category', quantity = '$quantity', description = '$description', cover = '$cover' WHERE id = '$book_id'";
-
             if (mysqli_query($conn, $update_query)) {
                 $message = "Book updated successfully!";
                 $message_type = "success";
@@ -80,28 +57,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $message = "Please fill all required fields.";
             $message_type = "warning";
         }
-    }
-    // Handle book deletion
-    elseif (isset($_POST['delete_book'])) {
+    } elseif (isset($_POST['delete_book'])) {
         $book_id = $_POST['book_id'];
-
-        // Check if book is currently issued
         $check_issued = "SELECT COUNT(*) as count FROM book_issues WHERE book_id = '$book_id' AND status IN ('issued', 'overdue')";
         $check_result = mysqli_query($conn, $check_issued);
         $check_data = mysqli_fetch_assoc($check_result);
-
         if ($check_data['count'] > 0) {
             $message = "Cannot delete book. It is currently issued to users.";
             $message_type = "danger";
         } else {
-            // Get book details to delete cover file
             $book_query = "SELECT cover FROM books WHERE id = '$book_id'";
             $book_result = mysqli_query($conn, $book_query);
             $book_data = mysqli_fetch_assoc($book_result);
-
             $delete_query = "DELETE FROM books WHERE id = '$book_id'";
             if (mysqli_query($conn, $delete_query)) {
-                // Delete cover file if it's not a placeholder
                 if ($book_data['cover'] && $book_data['cover'] != 'https://via.placeholder.com/190x260?text=Book+Cover' && file_exists($book_data['cover'])) {
                     unlink($book_data['cover']);
                 }
@@ -114,20 +83,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
 }
-
-// Get filter parameters
 $category_filter = isset($_GET['category']) ? $_GET['category'] : '';
 $availability_filter = isset($_GET['availability']) ? $_GET['availability'] : '';
 $search_query = isset($_GET['search']) ? $_GET['search'] : '';
-
-// Build the main query
 $books_query = "SELECT * FROM books WHERE 1=1";
-
-// Add filters
 if (!empty($category_filter)) {
     $books_query .= " AND category = '" . mysqli_real_escape_string($conn, $category_filter) . "'";
 }
-
 if (!empty($availability_filter)) {
     if ($availability_filter == 'available') {
         $books_query .= " AND quantity > 0";
@@ -135,23 +97,15 @@ if (!empty($availability_filter)) {
         $books_query .= " AND quantity = 0";
     }
 }
-
 if (!empty($search_query)) {
     $search_escaped = mysqli_real_escape_string($conn, $search_query);
     $books_query .= " AND (title LIKE '%$search_escaped%' OR author LIKE '%$search_escaped%' OR description LIKE '%$search_escaped%')";
 }
-
 $books_query .= " ORDER BY title";
 $books_result = mysqli_query($conn, $books_query);
-
-// Count how many books we have
 $total_books = mysqli_num_rows($books_result);
-
-// Get all categories for filter dropdown
 $categories_query = "SELECT DISTINCT category FROM books ORDER BY category";
 $categories_result = mysqli_query($conn, $categories_query);
-
-// Get statistics
 $stats_query = "SELECT 
                 COUNT(*) as total_books,
                 SUM(quantity) as total_copies,
@@ -176,7 +130,7 @@ $stats = mysqli_fetch_assoc($stats_result);
 
 <body class="admin-dashboard">
     <!-- Include admin navbar -->
-    <?php include("navbar_admin.php"); ?>
+    <?php include __DIR__ . '/navbar_admin.php'; ?>
 
     <div class="container mt-4">
         <div class="row">
@@ -429,7 +383,7 @@ $stats = mysqli_fetch_assoc($stats_result);
         <input type="hidden" name="delete_book" value="1">
     </form>
 
-    <?php include("footer.php"); ?>
+    <?php include __DIR__ . '/footer.php'; ?>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 

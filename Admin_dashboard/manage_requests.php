@@ -7,43 +7,34 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
     exit();
 }
 
-include("../database/config.php");
-
-$message = "";
-$message_type = "";
-
-// Handle request approval/rejection
+session_start();
+if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
+    header("Location: ../auth/adminLogin.php");
+    exit();
+}
+include __DIR__ . '/../database/config.php';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['approve_request'])) {
         $request_id = $_POST['request_id'];
         $book_id = $_POST['book_id'];
         $user_id = $_POST['user_id'];
         $admin_notes = $_POST['admin_notes'] ?? '';
-        
-        // Start transaction
         mysqli_begin_transaction($conn);
-        
         try {
-            // Update request status to approved
             $update_request = "UPDATE book_requests SET status = 'approved', admin_notes = ? WHERE id = ?";
             $stmt = mysqli_prepare($conn, $update_request);
             mysqli_stmt_bind_param($stmt, "si", $admin_notes, $request_id);
             mysqli_stmt_execute($stmt);
-            
-            // Reduce book quantity by 1
             $update_quantity = "UPDATE books SET quantity = quantity - 1 WHERE id = ? AND quantity > 0";
             $stmt = mysqli_prepare($conn, $update_quantity);
             mysqli_stmt_bind_param($stmt, "i", $book_id);
             mysqli_stmt_execute($stmt);
-            
             if (mysqli_affected_rows($conn) > 0) {
-                // Create book issue record
                 $due_date = date('Y-m-d H:i:s', strtotime('+14 days'));
                 $insert_issue = "INSERT INTO book_issues (user_id, book_id, request_id, due_date) VALUES (?, ?, ?, ?)";
                 $stmt = mysqli_prepare($conn, $insert_issue);
                 mysqli_stmt_bind_param($stmt, "iiis", $user_id, $book_id, $request_id, $due_date);
                 mysqli_stmt_execute($stmt);
-                
                 mysqli_commit($conn);
                 $message = "Request approved successfully! Book has been issued to the user.";
                 $message_type = "success";
@@ -60,11 +51,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     } elseif (isset($_POST['reject_request'])) {
         $request_id = $_POST['request_id'];
         $admin_notes = $_POST['admin_notes'] ?? '';
-        
         $update_request = "UPDATE book_requests SET status = 'rejected', admin_notes = ? WHERE id = ?";
         $stmt = mysqli_prepare($conn, $update_request);
         mysqli_stmt_bind_param($stmt, "si", $admin_notes, $request_id);
-        
         if (mysqli_stmt_execute($stmt)) {
             $message = "Request rejected successfully.";
             $message_type = "success";
@@ -74,8 +63,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
 }
-
-// Get all pending requests
 $pending_requests_query = "SELECT br.*, b.title, b.author, b.quantity, u.fullname, u.email 
                          FROM book_requests br 
                          JOIN books b ON br.book_id = b.id 
@@ -83,8 +70,6 @@ $pending_requests_query = "SELECT br.*, b.title, b.author, b.quantity, u.fullnam
                          WHERE br.status = 'pending' 
                          ORDER BY br.request_date ASC";
 $pending_requests = mysqli_query($conn, $pending_requests_query);
-
-// Get all requests (for admin reference)
 $all_requests_query = "SELECT br.*, b.title, b.author, u.fullname 
                       FROM book_requests br 
                       JOIN books b ON br.book_id = b.id 
@@ -93,19 +78,11 @@ $all_requests_query = "SELECT br.*, b.title, b.author, u.fullname
                       LIMIT 50";
 $all_requests = mysqli_query($conn, $all_requests_query);
 ?>
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Book Requests - Admin Dashboard</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../asset/style.css">
 </head>
 <body class="admin-dashboard">
     <!-- Include admin navbar -->
-    <?php include("navbar_admin.php"); ?>
+    <?php include __DIR__ . '/navbar_admin.php'; ?>
     
     <div class="container mt-4">
         <div class="row">

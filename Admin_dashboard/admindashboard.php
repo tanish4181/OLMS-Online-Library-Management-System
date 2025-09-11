@@ -1,104 +1,80 @@
+
 <?php
-// Start the session to check if admin is logged in
 session_start();
-
-// Check if admin is logged in
 if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
-    header("Location: ../auth/adminLogin.php");
-    exit();
+  header("Location: ../auth/adminLogin.php");
+  exit();
 }
-
-// Include the database connection file
-include('../database/config.php');
-
-// Set default values for our variables
+include __DIR__ . '/../database/config.php';
 $total_users = 0;
 $total_admins = 0;
 $total_all_users = 0;
 $total_books = 0;
 $borrowed_books = 0;
 $total_quantity = 0;
-
-// Count total members (only users, not admins)
 $sql = "SELECT COUNT(*) as total_users FROM users WHERE role = 'user'";
 $result = mysqli_query($conn, $sql);
 if ($result) {
-    $data = mysqli_fetch_assoc($result);
-    $total_users = $data['total_users'];
+  $data = mysqli_fetch_assoc($result);
+  $total_users = $data['total_users'];
 }
-
-// Count total admins
 $sql_admin = "SELECT COUNT(*) as total_admins FROM users WHERE role = 'admin'";
 $result_admin = mysqli_query($conn, $sql_admin);
 if ($result_admin) {
-    $data_admin = mysqli_fetch_assoc($result_admin);
-    $total_admins = $data_admin['total_admins'];
+  $data_admin = mysqli_fetch_assoc($result_admin);
+  $total_admins = $data_admin['total_admins'];
 }
-
-// Count total users (both users and admins)
 $sql_total = "SELECT COUNT(*) as total_all_users FROM users";
 $result_total = mysqli_query($conn, $sql_total);
 if ($result_total) {
-    $data_total = mysqli_fetch_assoc($result_total);
-    $total_all_users = $data_total['total_all_users'];
+  $data_total = mysqli_fetch_assoc($result_total);
+  $total_all_users = $data_total['total_all_users'];
 }
-
-// Count total books from books table
 $sql_books = "SELECT COUNT(*) as total_books FROM books";
 $result_books = mysqli_query($conn, $sql_books);
 if ($result_books) {
-    $data_books = mysqli_fetch_assoc($result_books);
-    $total_books = $data_books['total_books'];
+  $data_books = mysqli_fetch_assoc($result_books);
+  $total_books = $data_books['total_books'];
 }
-
-// Count total quantity of books (sum of all book quantities)
 $sql_total_quantity = "SELECT SUM(quantity) as total_quantity FROM books";
 $result_quantity = mysqli_query($conn, $sql_total_quantity);
 if ($result_quantity) {
-    $data_quantity = mysqli_fetch_assoc($result_quantity);
-    $total_quantity = $data_quantity['total_quantity'] ? $data_quantity['total_quantity'] : 0;
+  $data_quantity = mysqli_fetch_assoc($result_quantity);
+  $total_quantity = $data_quantity['total_quantity'] ? $data_quantity['total_quantity'] : 0;
 }
-
-// Check if borrowings table exists and count borrowed books
 $check_borrowing_table = "SHOW TABLES LIKE 'book_issues'";
 $borrowing_table_exists = mysqli_query($conn, $check_borrowing_table);
 if ($borrowing_table_exists && mysqli_num_rows($borrowing_table_exists) > 0) {
   $sql_borrowed = "SELECT COUNT(*) as borrowed_books FROM book_issues WHERE status IN ('issued', 'overdue')";
   $result_borrowed = mysqli_query($conn, $sql_borrowed);
   if ($result_borrowed) {
-    $data_borrowed = mysqli_fetch_assoc($result_borrowed);
-    $borrowed_books = $data_borrowed['borrowed_books'];
+  $data_borrowed = mysqli_fetch_assoc($result_borrowed);
+  $borrowed_books = $data_borrowed['borrowed_books'];
   }
 }
-
-// Get recent books for display
 $sql_recent_books = "SELECT * FROM books ORDER BY id DESC LIMIT 4";
 $result_recent = mysqli_query($conn, $sql_recent_books);
 $recent_books = array();
 if ($result_recent) {
-    while ($row = mysqli_fetch_assoc($result_recent)) {
-        $recent_books[] = $row;
-    }
+  while ($row = mysqli_fetch_assoc($result_recent)) {
+    $recent_books[] = $row;
+  }
 }
-
-// Get recent borrowings for the table
 $recent_borrowings_query = "SELECT bi.*, u.fullname, u.username, b.title, b.author 
-                           FROM book_issues bi 
-                           JOIN users u ON bi.user_id = u.id 
-                           JOIN books b ON bi.book_id = b.id 
-                           WHERE bi.status IN ('issued', 'overdue') 
-                           ORDER BY bi.issue_date DESC 
-                           LIMIT 5";
+               FROM book_issues bi 
+               JOIN users u ON bi.user_id = u.id 
+               JOIN books b ON bi.book_id = b.id 
+               WHERE bi.status IN ('issued', 'overdue') 
+               ORDER BY bi.issue_date DESC 
+               LIMIT 5";
 $recent_borrowings_result = mysqli_query($conn, $recent_borrowings_query);
-
-// Get overdue books
 $overdue_books_query = "SELECT bi.*, u.fullname, u.username, b.title, b.author 
-                       FROM book_issues bi 
-                       JOIN users u ON bi.user_id = u.id 
-                       JOIN books b ON bi.book_id = b.id 
-                       WHERE bi.due_date < CURDATE() AND bi.status = 'issued'
-                       ORDER BY bi.due_date ASC 
-                       LIMIT 5";
+             FROM book_issues bi 
+             JOIN users u ON bi.user_id = u.id 
+             JOIN books b ON bi.book_id = b.id 
+             WHERE bi.due_date < CURDATE() AND bi.status = 'issued'
+             ORDER BY bi.due_date ASC 
+             LIMIT 5";
 $overdue_books_result = mysqli_query($conn, $overdue_books_query);
 ?>
 
@@ -112,13 +88,13 @@ $overdue_books_result = mysqli_query($conn, $overdue_books_query);
   <link
     href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
     rel="stylesheet" />
-  <link rel="stylesheet" href="../asset/style.css" />
+  <link rel="stylesheet" href="/olms/asset/style.css" />
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 
 <body class="admin-dashboard">
   <?php
-  include("navbar_admin.php");
+  include __DIR__ . '/navbar_admin.php';
   ?>
 
   <div class="main-content">
@@ -239,9 +215,9 @@ $overdue_books_result = mysqli_query($conn, $overdue_books_query);
   <div class="container">
     <h2>Quick Actions</h2>
     <div class="admin-action">
-       <a href="./add_book.php"><button class="admin-aBtn">Add New Book</button></a> 
-       <a href="./add_user.php"><button class="admin-aBtn">Add New User</button></a> 
-       <a href="./return_book.php"><button class="admin-aBtn">View All Borrowing</button></a> 
+  <a href="/olms/Admin_dashboard/add_book.php"><button class="admin-aBtn">Add New Book</button></a> 
+  <a href="/olms/Admin_dashboard/add_user.php"><button class="admin-aBtn">Add New User</button></a> 
+  <a href="/olms/Admin_dashboard/return_book.php"><button class="admin-aBtn">View All Borrowing</button></a> 
     </div>
   </div>
   
@@ -323,7 +299,7 @@ $overdue_books_result = mysqli_query($conn, $overdue_books_query);
   </div>
   </div>
   <?php
-  include("footer.php");
+  include __DIR__ . '/footer.php';
   ?>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

@@ -1,7 +1,8 @@
+<?php
+include __DIR__ . '/config.php';
+?>
  <footer  class="py-4" style="background-color: #dc3545;">
         <div class="container-fluid">
-
-            <!-- Footer Bottom -->
             <hr class="my-4 text-white" style="opacity: 0.3;">
             <div class="row align-items-center">
                 <div class="col-md-6">

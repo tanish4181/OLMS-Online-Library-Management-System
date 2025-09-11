@@ -1,53 +1,34 @@
-<?php
-// Start the session to check if admin is logged in
-session_start();
 
-// Check if admin is logged in
+<?php
+session_start();
 if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
     header("Location: ../auth/adminLogin.php");
     exit();
 }
-
-// Include the database connection file
-include("../database/config.php");
-
-// Include the fine calculator file
-include("../includes/fine_calculator.php");
-
-// Variables to store messages
+include __DIR__ . '/../database/config.php';
+include __DIR__ . '/../includes/fine_calculator.php';
 $message = "";
 $message_type = "";
-
-// Check if the form was submitted
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['return_book'])) {
     $issue_id = $_POST['issue_id'];
     $book_id = $_POST['book_id'];
-    
-    // Get issue details
     $get_issue = "SELECT * FROM book_issues WHERE id = '$issue_id'";
     $result = mysqli_query($conn, $get_issue);
     $issue = mysqli_fetch_assoc($result);
-    
     if ($issue) {
-        // Calculate final fine
         $fine_info = getFineInfo($conn, $issue_id);
         $final_fine = $fine_info ? $fine_info['current_fine'] : 0;
-        
-        // Update book issue record
         $update_issue = "UPDATE book_issues SET 
                        status = 'returned', 
                        return_date = NOW(), 
                        fine_amount = '$final_fine' 
                        WHERE id = '$issue_id'";
-        
         if (mysqli_query($conn, $update_issue)) {
-            // Increase book quantity by 1
             $update_quantity = "UPDATE books SET quantity = quantity + 1 WHERE id = '$book_id'";
-            
             if (mysqli_query($conn, $update_quantity)) {
                 $message = "Book returned successfully!";
                 if ($final_fine > 0) {
-                    $message .= " Fine amount: ₹" . number_format($final_fine, 2);
+                    $message .= " Fine amount: " . number_format($final_fine, 2);
                 }
                 $message_type = "success";
             } else {
@@ -63,11 +44,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['return_book'])) {
         $message_type = "danger";
     }
 }
-
-// Handle fine payment
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['pay_fine'])) {
     $issue_id = $_POST['issue_id'];
-    
     if (markFineAsPaid($conn, $issue_id)) {
         $message = "Fine marked as paid successfully!";
         $message_type = "success";
@@ -76,11 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['pay_fine'])) {
         $message_type = "danger";
     }
 }
-
-// Update all fines first
 updateAllFines($conn);
-
-// Get all current book issues
 $current_issues_query = "SELECT bi.*, u.fullname, u.username, b.title, b.author, b.cover 
                         FROM book_issues bi 
                         JOIN users u ON bi.user_id = u.id 
@@ -102,7 +76,7 @@ $current_issues = mysqli_query($conn, $current_issues_query);
 </head>
 <body class="admin-dashboard">
     <!-- Include admin navbar -->
-    <?php include("navbar_admin.php"); ?>
+    <?php include __DIR__ . '/navbar_admin.php'; ?>
     
     <div class="container mt-4">
         <div class="row">
@@ -263,7 +237,7 @@ $current_issues = mysqli_query($conn, $current_issues_query);
         </div>
     </div>
   <?php
-  include("footer.php");
+    include __DIR__ . '/footer.php';
   ?>
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

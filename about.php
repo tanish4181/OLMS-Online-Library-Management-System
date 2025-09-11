@@ -9,7 +9,7 @@
       rel="stylesheet"
     />
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
-    <link rel="stylesheet" href="asset/style.css" />
+  <link rel="stylesheet" href="/olms/asset/style.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css"
@@ -22,7 +22,7 @@
   <body>
     
     <?php
-    include("navbar.php");
+  include __DIR__ . '/navbar.php';
     ?>
     
     
@@ -31,7 +31,7 @@
         <div class="col-12 col-sm-6 col-md-6 col-lg-3 aboutus-card">
           <div class="card text-center">
             <img
-              src="./asset/images/male-avtar.jpg"
+              src="/olms/asset/images/male-avtar.jpg"
               class="rounded-circle mx-auto"
               alt="..."
             />
@@ -56,7 +56,7 @@
         <div class="col-12 col-sm-6 col-md-6 col-lg-3 aboutus-card">
           <div class="card text-center">
             <img
-              src="./asset/images/male-avtar.jpg"
+              src="/olms/asset/images/male-avtar.jpg"
               class="rounded-circle mx-auto"
               alt="..."
             />
@@ -81,7 +81,7 @@
         <div class="col-12 col-sm-6 col-md-6 col-lg-3 aboutus-card">
           <div class="card text-center">
             <img
-              src="./asset/images/male-avtar.jpg"
+              src="/olms/asset/images/male-avtar.jpg"
               class="rounded-circle mx-auto"
               alt="..."
             />
@@ -106,7 +106,7 @@
         <div class="col-12 col-sm-6 col-md-6 col-lg-3 aboutus-card">
           <div class="card text-center">
             <img
-              src="./asset/images/female avatar.webp"
+              src="/olms/asset/images/female avatar.webp"
               class="rounded-circle mx-auto"
               alt="..."
               width="224px"
@@ -131,10 +131,9 @@
         </div>
       </div>
     </div>
-    <!-- footer -->
-    <?php
-    include("home_footer.php");
-    ?>
+  <?php
+  include __DIR__ . '/home_footer.php';
+  ?>
     
   </body>
 </html>

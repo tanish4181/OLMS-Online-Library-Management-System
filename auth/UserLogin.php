@@ -1,51 +1,30 @@
 <?php
-// Start the session to store user data
+// user login
 session_start();
-
-// Variables to store success and error messages
 $success = "";
 $error = "";
-
-// Include the database connection file
-require("../database/config.php"); 
-
-// Check if the form was submitted
+require __DIR__ . '/../database/config.php';
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Get the email and password from the form
-    $email = $_POST['email'];
-    $password = $_POST['password'];
-
-    // Create SQL query to find user with this email
-    $sql = "SELECT * FROM users WHERE email = '$email'";
-    $result = mysqli_query($conn, $sql);
-
-    // Check if we found a user with this email
-    if ($result && mysqli_num_rows($result) == 1) {
-        // Get the user data
-        $user = mysqli_fetch_assoc($result);
-
-        // Check if the password is correct
-        if (password_verify($password, $user['password'])) {
-            // Password is correct, so log the user in
-            $_SESSION['username'] = $user['username'];
-            $_SESSION['user_id'] = $user['id'];
-            $_SESSION['role'] = 'user'; 
-
-            // Show success message and redirect after 2 seconds
-            $success = "Login successful! Redirecting...";
-            header("refresh:2; url=../dashboard/user_dashboard.php"); 
-            exit();
-        } else {
-            // Password is wrong
-            $error = "Invalid password!";
-        }
+  $email = $_POST['email'];
+  $password = $_POST['password'];
+  $sql = "SELECT * FROM users WHERE email = '$email'";
+  $result = mysqli_query($conn, $sql);
+  if ($result && mysqli_num_rows($result) == 1) {
+    $user = mysqli_fetch_assoc($result);
+    if (password_verify($password, $user['password'])) {
+      $_SESSION['username'] = $user['username'];
+      $_SESSION['user_id'] = $user['id'];
+      $_SESSION['role'] = 'user'; 
+      $success = "Login successful! Redirecting...";
+      header("refresh:2; url=../dashboard/user_dashboard.php"); 
+      exit();
     } else {
-        // No user found with this email
-        $error = "User not found!";
+      $error = "Invalid password!";
     }
-
-    // Close the database connection
-    mysqli_close($conn);
+  } else {
+    $error = "User not found!";
+  }
+  mysqli_close($conn);
 }
 ?>
 
@@ -59,11 +38,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
-  <link rel="stylesheet" href="/OLMS/asset/style.css" />
+  <link rel="stylesheet" href="/olms/asset/style.css" />
 </head>
 
 <body>
-  <?php include("../navbar.php"); ?>
+  <?php include __DIR__ . '/../navbar.php'; ?>
   <section class="bg"></section>
 
   <section class="to-check">
